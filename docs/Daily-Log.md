@@ -149,3 +149,43 @@ Develop the first version of the AuraGen user interface.
 ```bash
 feat(ui): build AuraGen landing page using reusable React components
 ```
+# Day 5 - Friction Engine (Telemetry System)
+
+## Objective
+Build the frontend telemetry engine to collect user interaction data.
+
+## Completed Tasks
+- Created useMouseTracker custom hook.
+- Created useClickTracker custom hook.
+- Created useHesitationTracker custom hook.
+- Created useMouseVelocity custom hook.
+- Built TelemetryPanel component.
+- Displayed live mouse coordinates.
+- Displayed live click count.
+- Displayed idle time.
+- Calculated mouse velocity.
+- Implemented a prototype Cognitive Load Score.
+
+## Learned
+- React Custom Hooks
+- useState
+- useEffect
+- Event Listeners
+- Cleanup Functions
+- Mouse Events
+- Click Events
+- Velocity Calculation
+- Telemetry Collection
+
+## Deliverables
+✅ Mouse Tracking
+✅ Click Tracking
+✅ Hesitation Tracking
+✅ Velocity Tracking
+✅ Cognitive Load Score
+✅ Live Telemetry Panel
+
+## Git Commit
+```bash
+feat(telemetry): implement friction engine with cognitive load tracking
+```
