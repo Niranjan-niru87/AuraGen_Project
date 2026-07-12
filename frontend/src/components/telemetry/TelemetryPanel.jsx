@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import socket from "../../services/websocket";
 import useMouseTracker from "../../hooks/useMouseTracker";
 import useClickTracker from "../../hooks/useClickTracker";
 import useHesitationTracker from "../../hooks/useHesitationTracker";
@@ -12,6 +14,20 @@ function TelemetryPanel() {
   100,
   clicks * 2 + idleTime * 5 + Number(velocity) * 10
    );
+   useEffect(() => {
+  if (socket.readyState === WebSocket.OPEN) {
+    socket.send(
+      JSON.stringify({
+        mouseX: position.x,
+        mouseY: position.y,
+        clicks,
+        idleTime,
+        velocity,
+        cognitiveScore,
+      })
+    );
+  }
+}, [position, clicks, idleTime, velocity, cognitiveScore]);
 
   return (
     <div className="fixed bottom-5 right-5 bg-slate-800 text-white p-4 rounded-lg shadow-lg">

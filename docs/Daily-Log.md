@@ -189,3 +189,34 @@ Build the frontend telemetry engine to collect user interaction data.
 ```bash
 feat(telemetry): implement friction engine with cognitive load tracking
 ```
+# Day 6 - Backend & WebSocket Integration
+
+## Objective
+Connect the frontend telemetry engine to the backend using WebSockets.
+
+## Completed Tasks
+- Set up Express backend server.
+- Configured CORS.
+- Created WebSocket server using `ws`.
+- Connected React frontend to the backend.
+- Sent live telemetry data through WebSockets.
+- Verified telemetry received by the backend.
+- Created AI prompt builder template for future LLM integration.
+
+## Learned
+- Express.js basics.
+- WebSocket communication.
+- Client-server architecture.
+- JSON serialization.
+- Prompt engineering fundamentals.
+
+## Deliverables
+✅ Express Backend
+✅ WebSocket Communication
+✅ Live Telemetry Streaming
+✅ Prompt Builder
+
+## Git Commit
+```bash
+feat(backend): add WebSocket telemetry pipeline and AI prompt builder
+```
