@@ -220,3 +220,33 @@ Connect the frontend telemetry engine to the backend using WebSockets.
 ```bash
 feat(backend): add WebSocket telemetry pipeline and AI prompt builder
 ```
+
+# Week 2 - Day 7: Prompt Engineering
+
+## Objective
+Build a professional AI prompt pipeline for AuraGen.
+
+## Completed Tasks
+- Created `systemPrompt.js`
+- Created `promptTemplates.js`
+- Created `promptBuilder.js`
+- Combined system prompt, task template, and telemetry into one final prompt
+- Tested prompt generation using sample telemetry
+
+## Learned
+- System prompts
+- Task prompts
+- Prompt engineering
+- Dynamic prompt generation
+- Telemetry-driven AI context
+
+## Deliverables
+✅ System Prompt
+✅ Prompt Template
+✅ Prompt Builder
+✅ Prompt Testing
+
+## Git Commit
+```bash
+feat(ai): implement prompt engineering pipeline
+```
