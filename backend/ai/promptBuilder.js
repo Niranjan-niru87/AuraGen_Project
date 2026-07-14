@@ -1,21 +1,31 @@
+const systemPrompt = require("./systemPrompt");
+const uiGenerationTemplate = require("./promptTemplates");
+
 function buildPrompt(telemetry) {
   return `
-You are an expert React UI designer.
+${systemPrompt}
 
-The user is interacting with a complex form.
+${uiGenerationTemplate}
 
-Telemetry Data:
-- Mouse X: ${telemetry.mouseX}
-- Mouse Y: ${telemetry.mouseY}
-- Total Clicks: ${telemetry.clicks}
-- Idle Time: ${telemetry.idleTime} seconds
-- Mouse Velocity: ${telemetry.velocity}
-- Cognitive Load Score: ${telemetry.cognitiveScore}
+Current User Telemetry
 
-Your task:
-Generate a simplified step-by-step UI in JSON format.
+Mouse Position:
+X = ${telemetry.mouseX}
+Y = ${telemetry.mouseY}
 
-Only return valid JSON.
+Clicks:
+${telemetry.clicks}
+
+Idle Time:
+${telemetry.idleTime} seconds
+
+Mouse Velocity:
+${telemetry.velocity}
+
+Cognitive Load Score:
+${telemetry.cognitiveScore}
+
+Generate the JSON UI now.
 `;
 }
 
