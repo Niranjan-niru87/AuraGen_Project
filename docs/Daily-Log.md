@@ -250,3 +250,116 @@ Build a professional AI prompt pipeline for AuraGen.
 ```bash
 feat(ai): implement prompt engineering pipeline
 ```
+
+
+# Week 2 - Day 8: Gemini AI Integration
+
+## Objective
+Integrate Google Gemini AI into the AuraGen backend and establish successful communication between the application and the AI model.
+
+---
+
+## Topics Covered
+
+- Google GenAI SDK
+- Gemini API
+- Environment Variables
+- Google AI Studio
+- Google Cloud Configuration
+- AI Model Integration
+
+---
+
+## Tasks Completed
+
+### 1. Installed Google GenAI SDK
+
+```bash
+npm uninstall @google/generative-ai
+npm install @google/genai dotenv
+```
+
+---
+
+### 2. Configured Environment Variables
+
+Created the `.env` file and securely stored the Gemini API key.
+
+```env
+GEMINI_API_KEY=YOUR_API_KEY
+```
+
+---
+
+### 3. Created Gemini Client
+
+Created the AI client to initialize and connect with the Gemini API.
+
+**File Created**
+
+```
+backend/ai/geminiClient.js
+```
+
+---
+
+### 4. Tested Gemini API Connection
+
+Created a test script to verify communication with the AI model.
+
+**File Created**
+
+```
+backend/testGemini.js
+```
+
+Successfully received a response from Gemini.
+
+---
+
+### 5. Verified API Configuration
+
+- API Key configured successfully
+- Google AI Studio project verified
+- Gemini API enabled
+- Backend connected successfully
+
+---
+
+## Files Created / Updated
+
+```
+backend/
+│
+├── ai/
+│   └── geminiClient.js
+│
+├── testGemini.js
+│
+└── .env
+```
+
+---
+
+## Skills Learned
+
+- Google GenAI SDK
+- Gemini API Integration
+- API Authentication
+- Environment Variable Management
+- Backend to AI Communication
+- Google AI Studio Configuration
+
+---
+
+## Outcome
+
+✅ Successfully integrated Google Gemini AI into AuraGen.
+
+✅ Backend can now send prompts and receive responses from the Gemini AI model.
+
+---
+
+## Next Goal
+
+Build the JSON Generation Engine to receive structured JSON responses from Gemini AI for dynamic UI rendering.
