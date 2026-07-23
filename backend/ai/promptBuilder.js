@@ -1,32 +1,33 @@
 const systemPrompt = require("./systemPrompt");
-const uiGenerationTemplate = require("./promptTemplates");
+const promptTemplate = require("./promptTemplates");
 
 function buildPrompt(telemetry) {
-  return `
+
+    return `
 ${systemPrompt}
 
-${uiGenerationTemplate}
+${promptTemplate}
 
 Current User Telemetry
 
-Mouse Position:
-X = ${telemetry.mouseX}
-Y = ${telemetry.mouseY}
+Mouse X : ${telemetry.mouseX}
+Mouse Y : ${telemetry.mouseY}
 
-Clicks:
-${telemetry.clicks}
+Clicks : ${telemetry.clicks}
 
-Idle Time:
-${telemetry.idleTime} seconds
+Idle Time : ${telemetry.idleTime} seconds
 
-Mouse Velocity:
-${telemetry.velocity}
+Velocity : ${telemetry.velocity}
 
-Cognitive Load Score:
-${telemetry.cognitiveScore}
+Cognitive Score : ${telemetry.cognitiveScore}
 
-Generate the JSON UI now.
+Mode : ${telemetry.mode}
+
+Reason : ${telemetry.reason}
+
+Form Type : ${telemetry.formType}
 `;
+
 }
 
 module.exports = buildPrompt;

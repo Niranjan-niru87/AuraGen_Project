@@ -252,114 +252,178 @@ feat(ai): implement prompt engineering pipeline
 ```
 
 
-# Week 2 - Day 8: Gemini AI Integration
+# Week 2 - Day 8: AI JSON Generation
 
 ## Objective
-Integrate Google Gemini AI into the AuraGen backend and establish successful communication between the application and the AI model.
+Build the AI-powered JSON generation pipeline for AuraGen using the Gemini API.
 
----
+## Completed Tasks
+- Created `geminiClient.js`
+- Implemented Gemini API connection
+- Created `jsonGenerator.js`
+- Tested AI-generated JSON responses
+- Added fallback JSON generation for API failures
+- Verified backend AI pipeline
 
-## Topics Covered
+## Learned
+- Gemini API Integration
+- AI Response Handling
+- JSON Generation
+- Modular Backend Architecture
+- API Error Handling
 
-- Google GenAI SDK
-- Gemini API
-- Environment Variables
-- Google AI Studio
-- Google Cloud Configuration
-- AI Model Integration
+## Deliverables
+✅ Gemini Client
+✅ JSON Generator
+✅ AI Integration
+✅ JSON Response Testing
 
----
-
-## Tasks Completed
-
-### 1. Installed Google GenAI SDK
+## Git Commit
 
 ```bash
-npm uninstall @google/generative-ai
-npm install @google/genai dotenv
+feat(ai): implement Gemini JSON generation pipeline
 ```
 
 ---
 
-### 2. Configured Environment Variables
+# Week 2 - Day 9: Dynamic Form Renderer
 
-Created the `.env` file and securely stored the Gemini API key.
+## Objective
+Render complete forms dynamically from JSON instead of hardcoded React components.
 
-```env
-GEMINI_API_KEY=YOUR_API_KEY
+## Completed Tasks
+- Created `DynamicForm.jsx`
+- Created `DynamicInput.jsx`
+- Implemented dynamic field rendering
+- Added support for multiple input types
+- Implemented required field validation
+- Rendered backend-generated JSON successfully
+
+## Learned
+- Dynamic UI Rendering
+- React Component Composition
+- JSON Driven UI
+- Reusable Components
+- Conditional Rendering
+
+## Deliverables
+✅ Dynamic Form Renderer
+✅ Dynamic Input Component
+✅ JSON Parsing
+✅ Dynamic UI
+
+## Git Commit
+
+```bash
+feat(frontend): implement dynamic JSON form renderer
 ```
 
 ---
 
-### 3. Created Gemini Client
+# Week 2 - Day 10: Frontend-Backend Integration
 
-Created the AI client to initialize and connect with the Gemini API.
+## Objective
+Connect the React frontend with the Express backend for dynamic data exchange.
 
-**File Created**
+## Completed Tasks
+- Configured Express backend
+- Enabled CORS
+- Created `/api/form` endpoint
+- Connected React using Fetch API
+- Displayed backend-generated forms
+- Tested frontend-backend communication
 
-```
-backend/ai/geminiClient.js
-```
+## Learned
+- REST API
+- Express.js
+- Fetch API
+- Client-Server Communication
+- Backend Integration
 
----
+## Deliverables
+✅ Express API
+✅ API Endpoint
+✅ React Integration
+✅ Dynamic Data Loading
 
-### 4. Tested Gemini API Connection
+## Git Commit
 
-Created a test script to verify communication with the AI model.
-
-**File Created**
-
-```
-backend/testGemini.js
-```
-
-Successfully received a response from Gemini.
-
----
-
-### 5. Verified API Configuration
-
-- API Key configured successfully
-- Google AI Studio project verified
-- Gemini API enabled
-- Backend connected successfully
-
----
-
-## Files Created / Updated
-
-```
-backend/
-│
-├── ai/
-│   └── geminiClient.js
-│
-├── testGemini.js
-│
-└── .env
+```bash
+feat(api): connect React frontend with Express backend
 ```
 
 ---
 
-## Skills Learned
+# Week 2 - Day 11: Live Telemetry System
 
-- Google GenAI SDK
-- Gemini API Integration
-- API Authentication
-- Environment Variable Management
-- Backend to AI Communication
-- Google AI Studio Configuration
+## Objective
+Capture real-time user behavior and stream telemetry data to the backend.
+
+## Completed Tasks
+- Implemented WebSocket connection
+- Created telemetry service
+- Implemented mouse tracking
+- Implemented click tracking
+- Implemented mouse velocity tracking
+- Implemented hesitation tracking
+- Calculated Cognitive Load Score
+- Displayed live telemetry panel
+
+## Learned
+- WebSockets
+- Real-Time Communication
+- React Hooks
+- Telemetry Collection
+- User Behavior Analytics
+
+## Deliverables
+✅ WebSocket Connection
+✅ Mouse Tracking
+✅ Click Tracking
+✅ Velocity Tracking
+✅ Hesitation Tracking
+✅ Cognitive Score
+✅ Live Telemetry Panel
+
+## Git Commit
+
+```bash
+feat(telemetry): implement live telemetry monitoring system
+```
 
 ---
 
-## Outcome
+# Week 2 - Day 12: Decision Engine
 
-✅ Successfully integrated Google Gemini AI into AuraGen.
+## Objective
+Analyze live telemetry and determine the appropriate adaptive UI mode.
 
-✅ Backend can now send prompts and receive responses from the Gemini AI model.
+## Completed Tasks
+- Created `decisionEngine.js`
+- Implemented NORMAL mode detection
+- Implemented GUIDED mode detection
+- Implemented SIMPLIFIED mode detection
+- Connected telemetry with decision engine
+- Displayed adaptive decisions in backend console
+- Verified decision logic using live telemetry
 
----
+## Learned
+- Decision Engine Design
+- Rule-Based AI
+- Behavioral Analysis
+- Adaptive UI Logic
+- Cognitive State Detection
 
-## Next Goal
+## Deliverables
+✅ Decision Engine
+✅ Adaptive Modes
+✅ Rule-Based Logic
+✅ Telemetry Analysis
+
+## Git Commit
+
+```bash
+feat(ai): implement adaptive decision engine
+```
 
 Build the JSON Generation Engine to receive structured JSON responses from Gemini AI for dynamic UI rendering.
