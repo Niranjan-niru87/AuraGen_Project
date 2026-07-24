@@ -56,18 +56,29 @@ wss.on("connection", (ws) => {
 
     console.table(telemetry);
 
-    const decision =
-    analyzeTelemetry(telemetry);
+   const decision = analyzeTelemetry(telemetry);
 
-    const form =
-    await generateAdaptiveUI(
+console.log("✅ Decision Created");
+console.log(decision);
+
+const form = await generateAdaptiveUI(
     telemetry,
     decision
-    );
+);
 
-console.log("\nGenerated Form:");
-
+console.log("✅ Form Generated");
 console.log(form);
+
+console.log("✅ Sending To React");
+
+ws.send(
+    JSON.stringify({
+        type: "adaptiveUI",
+        payload: form
+    })
+);
+
+console.log("✅ Sent Successfully");
 
 });
 

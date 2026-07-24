@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 
 import DynamicForm from "../components/wizard/DynamicForm";
 import TelemetryPanel from "../components/telemetry/TelemetryPanel";
+import socket from "../services/websocket";
 
 function Demo() {
 
     const [form, setForm] = useState(null);
 
+    // Load initial form
     useEffect(() => {
 
         async function loadForm() {
@@ -23,6 +25,25 @@ function Demo() {
 
     }, []);
 
+    // Listen for WebSocket messages
+    useEffect(() => {
+
+        socket.onmessage = (event) => {
+
+    const message = JSON.parse(event.data);
+
+    console.log("📩 Message:", message);
+
+    if (message.type === "adaptiveUI") {
+
+        setForm(message.payload);
+
+    }
+
+};
+
+    }, []);
+
     if (!form) {
 
         return <h2>Loading...</h2>;
@@ -30,17 +51,11 @@ function Demo() {
     }
 
     return (
-
         <>
-
             <TelemetryPanel />
-
             <DynamicForm form={form} />
-
         </>
-
     );
-
 }
 
 export default Demo;

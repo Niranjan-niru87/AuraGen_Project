@@ -14,19 +14,34 @@ function TelemetryPanel() {
   100,
   clicks * 2 + idleTime * 5 + Number(velocity) * 10
    );
-   useEffect(() => {
-  if (socket.readyState === WebSocket.OPEN) {
-    socket.send(
-      JSON.stringify({
+ useEffect(() => {
+
+    console.log("=================================");
+    console.log("Socket ReadyState:", socket.readyState);
+
+    const telemetry = {
         mouseX: position.x,
         mouseY: position.y,
         clicks,
         idleTime,
         velocity,
         cognitiveScore,
-      })
-    );
-  }
+    };
+
+    console.log("Telemetry:", telemetry);
+
+    if (socket.readyState === WebSocket.OPEN) {
+
+        console.log("✅ Sending telemetry...");
+
+        socket.send(JSON.stringify(telemetry));
+
+    } else {
+
+        console.log("❌ Socket is NOT open");
+
+    }
+
 }, [position, clicks, idleTime, velocity, cognitiveScore]);
 
   return (
