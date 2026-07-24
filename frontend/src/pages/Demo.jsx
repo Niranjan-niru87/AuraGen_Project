@@ -28,18 +28,22 @@ function Demo() {
     // Listen for WebSocket messages
     useEffect(() => {
 
-        socket.onmessage = (event) => {
+       socket.onmessage = (event) => {
+
+    // Ignore plain text messages
+    if (!event.data.startsWith("{")) {
+        console.log(event.data);
+        return;
+    }
 
     const message = JSON.parse(event.data);
 
-    console.log("📩 Message:", message);
+    console.log(message);
 
     if (message.type === "adaptiveUI") {
-
+        console.log("Received payload:", message.payload);
         setForm(message.payload);
-
     }
-
 };
 
     }, []);

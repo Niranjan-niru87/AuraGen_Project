@@ -71,12 +71,10 @@ console.log(form);
 
 console.log("✅ Sending To React");
 
-ws.send(
-    JSON.stringify({
-        type: "adaptiveUI",
-        payload: form
-    })
-);
+ws.send(JSON.stringify({
+    type: "connected",
+    message: "Connected to AuraGen Backend"
+}));
 
 console.log("✅ Sent Successfully");
 

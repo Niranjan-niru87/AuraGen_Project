@@ -1,38 +1,59 @@
-function generateUI(telemetry) {
+const ai = require("./geminiClient");
+const buildPrompt = require("./promptBuilder");
 
-    return {
+async function generateUI(telemetry) {
 
-        title: "Registration Form",
+    const prompt = buildPrompt(telemetry);
 
-        description: "Let's complete this step by step.",
+    try {
 
-        cognitiveScore: telemetry.cognitiveScore,
+        const response = await ai.models.generateContent({
+            model: "gemini-3.5-flash-lite",
+            contents: prompt
+        });
 
-        steps: [
+        const text = response.text.trim();
 
-            {
-                label: "Full Name",
-                field: "fullName",
-                type: "text",
-                required: true
-            },
+console.log("========== GEMINI RAW RESPONSE ==========");
+console.log(text);
+console.log("=========================================");
 
-            {
-                label: "Email",
-                field: "email",
-                type: "email",
-                required: true
-            },
+return JSON.parse(text);
 
-            {
-                label: "Phone Number",
-                field: "phone",
-                type: "tel",
-                required: false
-            }
+    } catch (error) {
 
-        ]
-    };
+        console.error("Gemini Error:", error);
+
+        // Fallback JSON
+        return {
+
+            title: "Registration Form",
+
+            description: "Let's complete this step by step.",
+
+            cognitiveScore: telemetry.cognitiveScore,
+
+            steps: [
+
+                {
+                    label: "Full Name",
+                    field: "fullName",
+                    type: "text",
+                    required: true
+                },
+
+                {
+                    label: "Email",
+                    field: "email",
+                    type: "email",
+                    required: true
+                }
+
+            ]
+
+        };
+
+    }
 
 }
 
