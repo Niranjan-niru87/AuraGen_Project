@@ -486,3 +486,18 @@ Completed:
 
 Status:
 Week 2 Completed Successfully
+
+## week3-Day 15
+
+### Features Implemented
+- Integrated React Router
+- Connected Home and Demo pages
+- Launch Demo navigation
+- Back Home navigation
+- Reused Navbar across pages
+
+### Challenges
+- None
+
+### Outcome
+AuraGen now behaves like a professional multi-page application with seamless navigation.

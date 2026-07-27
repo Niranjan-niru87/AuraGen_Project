@@ -1,3 +1,5 @@
+import Navbar from "../components/layout/Navbar";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import DynamicForm from "../components/wizard/DynamicForm";
@@ -55,11 +57,22 @@ function Demo() {
     }
 
     return (
-        <>
-            <TelemetryPanel />
-            <DynamicForm form={form} />
-        </>
-    );
+    <>
+    <Navbar />
+
+    <div className="p-4">
+        <Link
+            to="/"
+            className="inline-block mb-4 text-cyan-400 hover:text-cyan-300"
+        >
+            ← Back Home
+        </Link>
+    </div>
+
+    <TelemetryPanel />
+    <DynamicForm form={form} />
+</>
+);
 }
 
 export default Demo;

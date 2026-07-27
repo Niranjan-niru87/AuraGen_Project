@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 function Hero() {
   return (
     <section className="min-h-[80vh] flex flex-col justify-center items-center bg-slate-950 text-white px-6">
@@ -16,9 +17,12 @@ function Hero() {
         AI-generated experiences in real time.
       </p>
 
-      <button className="mt-10 px-8 py-3 bg-cyan-500 rounded-lg hover:bg-cyan-600 transition">
-        Launch Demo
-      </button>
+      <Link
+    to="/demo"
+    className="mt-10 px-8 py-3 bg-cyan-500 rounded-lg hover:bg-cyan-600 transition inline-block"
+>
+    Launch Demo
+</Link>
 
     </section>
   );
