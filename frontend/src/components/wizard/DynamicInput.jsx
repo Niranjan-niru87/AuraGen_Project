@@ -1,5 +1,4 @@
-function DynamicInput({ field }) {
-
+function DynamicInput({ field, value, onChange }) {
     return (
 
         <div style={{ marginBottom: "20px" }}>
@@ -13,21 +12,17 @@ function DynamicInput({ field }) {
             <br />
 
             <input
-
-                type={field.type}
-
-                placeholder={field.label}
-
-                required={field.required}
-
-                style={{
-                    width: "300px",
-                    padding: "10px",
-                    marginTop: "5px"
-                }}
-
-            />
-
+    type={field.type}
+    placeholder={field.label}
+    required={field.required}
+    value={value}
+    onChange={onChange}
+    style={{
+        width: "300px",
+        padding: "10px",
+        marginTop: "5px"
+    }}
+/>
         </div>
 
     );

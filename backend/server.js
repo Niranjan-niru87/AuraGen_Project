@@ -19,20 +19,18 @@ app.get("/", (req, res) => {
 const server = app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
-app.get("/api/form", (req, res) => {
+app.get("/api/form", async (req, res) => {
 
     const telemetry = {
-
         mouseX: 150,
         mouseY: 200,
         clicks: 8,
         idleTime: 3,
         velocity: 2.5,
         cognitiveScore: 75
-
     };
 
-    const form = generateUI(telemetry);
+    const form = await generateUI(telemetry);
 
     res.json(form);
 

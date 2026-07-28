@@ -13,19 +13,37 @@ function Demo() {
     // Load initial form
     useEffect(() => {
 
-        async function loadForm() {
+    async function loadForm() {
+
+        console.log("Step 1: loadForm started");
+
+        try {
+
+            console.log("Step 2: Fetching...");
 
             const response = await fetch("http://localhost:5000/api/form");
 
+            console.log("Step 3: Response", response);
+
             const data = await response.json();
+
+            console.log("Step 4: Data", data);
 
             setForm(data);
 
+            console.log("Step 5: Form Stored");
+
+        } catch (error) {
+
+            console.error("Fetch Error:", error);
+
         }
+    }
 
-        loadForm();
+    // ⭐ THIS LINE IS MISSING
+    loadForm();
 
-    }, []);
+}, []);
 
     // Listen for WebSocket messages
     useEffect(() => {
