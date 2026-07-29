@@ -1,10 +1,14 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DynamicInput from "./DynamicInput";
 
 function DynamicForm({ form }) {
 
     const [currentStep, setCurrentStep] = useState(0);
     const [formData, setFormData] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState("");
+    const navigate = useNavigate();
     const nextStep = () => {
     if (currentStep < form.steps.length - 1) {
         setCurrentStep(currentStep + 1);
@@ -15,6 +19,34 @@ const previousStep = () => {
     if (currentStep > 0) {
         setCurrentStep(currentStep - 1);
     }
+};
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitError("");
+setIsSubmitting(true);
+
+    try {
+        const response = await fetch("http://localhost:5000/api/submit", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+
+        console.log("Server Response:", result);
+
+        navigate("/success");
+
+    } catch (error) {
+    console.error("Submission Failed:", error);
+
+    setSubmitError("Submission failed. Please try again.");
+
+    setIsSubmitting(false);
+}
 };
 
     // Wait until the form arrives from the backend
@@ -34,7 +66,7 @@ const previousStep = () => {
     Field {currentStep + 1} of {form.steps.length}
 </p>
 
-            <form>
+    <form onSubmit={handleSubmit}>
 
     <DynamicInput
     key={form.steps[currentStep].field}
@@ -46,8 +78,18 @@ const previousStep = () => {
             [form.steps[currentStep].field]: e.target.value,
         })
     }
-/>
 
+/>
+{submitError && (
+    <p
+        style={{
+            color: "red",
+            marginBottom: "15px",
+        }}
+    >
+        {submitError}
+    </p>
+)}
     <div style={{ marginTop: "20px" }}>
 
     {currentStep > 0 && (
@@ -69,11 +111,14 @@ const previousStep = () => {
         </button>
     ) : (
         <button
-            type="submit"
-            style={{ marginLeft: "10px" }}
-        >
-            Submit
-        </button>
+    type="submit"
+    disabled={isSubmitting}
+    style={{
+        marginLeft: "10px"
+    }}
+>
+    {isSubmitting ? "Submitting..." : "Submit"}
+</button>
     )}
 
 </div>

@@ -9,6 +9,7 @@ require("./ai/adaptiveUI");
 const app = express();
 
 app.use(cors());
+app.use(express.json());
 
 const PORT = 5000;
 
@@ -33,6 +34,17 @@ app.get("/api/form", async (req, res) => {
     const form = await generateUI(telemetry);
 
     res.json(form);
+
+});
+app.post("/api/submit", (req, res) => {
+
+    console.log("========== FORM SUBMISSION ==========");
+    console.log(req.body);
+
+    res.json({
+        success: true,
+        message: "Form submitted successfully!"
+    });
 
 });
 

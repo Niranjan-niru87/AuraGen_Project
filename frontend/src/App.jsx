@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Demo from "./pages/Demo";
+import SuccessPage from "./pages/SuccessPage";
 
 function App() {
 
@@ -19,6 +20,10 @@ function App() {
                 <Route
                     path="/demo"
                     element={<Demo />}
+                />
+                <Route
+                    path="/success"
+                    element={<SuccessPage />}
                 />
 
             </Routes>
