@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DynamicInput from "./DynamicInput";
 import "./DynamicForm.css";
+import ReviewPage from "./ReviewPage";
 
 function DynamicForm({ form }) {
 
@@ -10,8 +11,31 @@ function DynamicForm({ form }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState("");
     const [validationError, setValidationError] = useState("");
+    const [showReview, setShowReview] = useState(false);
     const navigate = useNavigate();
     const progress = ((currentStep + 1) / form.steps.length) * 100;
+
+    const validateCurrentField = () => {
+
+    const currentField = form.steps[currentStep];
+    const currentValue = formData[currentField.field] || "";
+
+    if (currentField.required && currentValue.trim() === "") {
+        setValidationError(`Please enter your ${currentField.label}.`);
+        return false;
+    }
+
+    if (
+        currentField.type === "email" &&
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(currentValue)
+    ) {
+        setValidationError("Please enter a valid email address.");
+        return false;
+    }
+
+    setValidationError("");
+    return true;
+};
    const nextStep = () => {
 
     const currentField = form.steps[currentStep];
@@ -80,6 +104,16 @@ setIsSubmitting(true);
     if (!form || !form.steps) {
         return <h2>Loading form...</h2>;
     }
+   if (showReview) {
+    return (
+        <ReviewPage
+            formData={formData}
+            onEdit={() => setShowReview(false)}
+            onSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
+        />
+    );
+}
 
     return (
 
@@ -162,25 +196,20 @@ setIsSubmitting(true);
         </button>
     )}
 
-    {currentStep < form.steps.length - 1 ? (
-        <button
-            type="button"
-            onClick={nextStep}
-            style={{ marginLeft: "10px" }}
-        >
-            Next
-        </button>
-    ) : (
-        <button
-    type="submit"
-    disabled={isSubmitting}
-    style={{
-        marginLeft: "10px"
+   <button
+    type="button"
+    onClick={() => {
+        console.log("Review Clicked");
+
+        if (!validateCurrentField()) return;
+
+        console.log("Setting showReview");
+
+        setShowReview(true);
     }}
 >
-    {isSubmitting ? "Submitting..." : "Submit"}
+    Review
 </button>
-    )}
 
 </div>
 
