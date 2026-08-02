@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 function Hero() {
+  const navigate = useNavigate();
   return (
     <section className="min-h-[80vh] flex flex-col justify-center items-center bg-slate-950 text-white px-6">
 
@@ -17,12 +18,19 @@ function Hero() {
         AI-generated experiences in real time.
       </p>
 
-      <Link
-    to="/demo"
-    className="mt-10 px-8 py-3 bg-cyan-500 rounded-lg hover:bg-cyan-600 transition inline-block"
+      <button
+    onClick={() => {
+
+        localStorage.removeItem("auraGenFormData");
+        localStorage.removeItem("auraGenCurrentStep");
+
+        navigate("/demo");
+
+    }}
+    className="mt-10 px-8 py-3 bg-cyan-500 rounded-lg hover:bg-cyan-600 transition"
 >
     Launch Demo
-</Link>
+</button>
 
     </section>
   );

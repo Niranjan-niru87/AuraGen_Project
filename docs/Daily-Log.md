@@ -646,3 +646,39 @@ Implement a professional Review Page workflow for AuraGen and improve AI-generat
 - Form Workflow Design
 - State Management
 - Professional Debugging Techniques
+
+# Day 20 – Context Preservation & Draft Recovery
+
+**Date:** (Today's Date)
+
+## Objective
+Implement context preservation so users can continue filling the form after refreshing the page without losing their progress.
+
+## Completed Tasks
+- Implemented automatic draft saving using `localStorage`.
+- Restored form data after page refresh.
+- Saved and restored the current form step.
+- Fixed React `useEffect` race condition using the `isRestored` state.
+- Used functional state updates with `setFormData(prevData => ...)`.
+- Added a "Draft Restored Successfully" notification.
+- Cleared saved draft data after successful form submission.
+- Fixed the Review page so restored data is displayed correctly.
+- Ensured "Launch Demo" starts a fresh form.
+
+## Challenges Faced
+- The restored data was being overwritten by an empty object after refresh.
+- The Review page displayed only the email after a page refresh.
+- The wizard navigation showed the Review button instead of the Next button due to conditional rendering logic.
+
+## Solutions
+- Introduced an `isRestored` flag to prevent saving before restoration completed.
+- Switched to functional state updates to merge restored data correctly.
+- Corrected the button rendering logic for the multi-step wizard.
+- Implemented draft recovery notification and automatic cleanup after submission.
+
+## Key Learnings
+- React `useEffect` execution order.
+- Preventing race conditions during state restoration.
+- Persisting React state with `localStorage`.
+- Functional state updates using `prevData`.
+- Managing multi-step forms with persistent user context.

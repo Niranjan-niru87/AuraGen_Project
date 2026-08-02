@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DynamicInput from "./DynamicInput";
 import "./DynamicForm.css";
@@ -8,6 +8,53 @@ function DynamicForm({ form }) {
 
     const [currentStep, setCurrentStep] = useState(0);
     const [formData, setFormData] = useState({});
+    const [isRestored, setIsRestored] = useState(false);
+    const [draftMessage, setDraftMessage] = useState("");
+
+    // Save Draft:
+    useEffect(() => {
+
+    if (!isRestored) return;
+
+    localStorage.setItem(
+        "auraGenFormData",
+        JSON.stringify(formData)
+    );
+
+}, [formData, isRestored]);
+
+// Restore Draft    
+useEffect(() => {
+
+    const savedData = localStorage.getItem("auraGenFormData");
+
+    console.log("Restoring:", savedData);
+
+    if (savedData) {
+
+    setFormData(JSON.parse(savedData));
+
+    const savedStep = localStorage.getItem("auraGenCurrentStep");
+
+    if (savedStep) {
+        setCurrentStep(Number(savedStep));
+    }
+
+    // Show notification
+    setDraftMessage("✅ Draft Restored Successfully");
+    console.log("Draft Message:", draftMessage);
+
+    // Hide after 3 seconds
+    setTimeout(() => {
+        setDraftMessage("");
+    }, 3000);
+
+    console.log("Draft Restored");
+
+}
+    setIsRestored(true);
+
+}, []); 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState("");
     const [validationError, setValidationError] = useState("");
@@ -59,9 +106,17 @@ function DynamicForm({ form }) {
 
     setValidationError("");
 
-    if (currentStep < form.steps.length - 1) {
-        setCurrentStep(currentStep + 1);
-    }
+   if (currentStep < form.steps.length - 1) {
+
+    const next = currentStep + 1;
+
+    setCurrentStep(next);
+
+    localStorage.setItem(
+        "auraGenCurrentStep",
+        next
+    );
+}
 };
 
 const previousStep = () => {
@@ -88,7 +143,11 @@ setIsSubmitting(true);
 
         console.log("Server Response:", result);
 
-        navigate("/success");
+// Clear saved draft
+localStorage.removeItem("auraGenFormData");
+localStorage.removeItem("auraGenCurrentStep");
+
+navigate("/success");
 
     } catch (error) {
     console.error("Submission Failed:", error);
@@ -104,7 +163,12 @@ setIsSubmitting(true);
     if (!form || !form.steps) {
         return <h2>Loading form...</h2>;
     }
+    console.log("Current Step:", currentStep);
+console.log("Total Steps:", form.steps.length);
+console.log("Current Field:", form.steps[currentStep]);
+console.log("Review Data:", formData);
    if (showReview) {
+    console.log("Current formData:", formData);
     return (
         <ReviewPage
             formData={formData}
@@ -122,6 +186,21 @@ setIsSubmitting(true);
             <h1>{form.title}</h1>
 
             <p>{form.description}</p>
+            {draftMessage && (
+    <div
+        style={{
+            backgroundColor: "#d4edda",
+            color: "#155724",
+            padding: "10px",
+            borderRadius: "6px",
+            marginBottom: "15px",
+            textAlign: "center",
+            fontWeight: "bold",
+        }}
+    >
+        {draftMessage}
+    </div>
+)}
             <div
     style={{
         width: "100%",
@@ -158,11 +237,11 @@ setIsSubmitting(true);
         field={form.steps[currentStep]}
         value={formData[form.steps[currentStep].field] || ""}
         onChange={(e) =>
-            setFormData({
-                ...formData,
-                [form.steps[currentStep].field]: e.target.value,
-            })
-        }
+    setFormData((prevData) => ({
+        ...prevData,
+        [form.steps[currentStep].field]: e.target.value,
+    }))
+}
     />
 </div>
 {submitError && (
@@ -187,29 +266,42 @@ setIsSubmitting(true);
     </p>
 )}
 
-    {currentStep > 0 && (
-        <button
-            type="button"
-            onClick={previousStep}
-        >
-            Previous
-        </button>
-    )}
+   {currentStep > 0 && (
+    <button
+        type="button"
+        onClick={previousStep}
+    >
+        Previous
+    </button>
+)}
 
-   <button
-    type="button"
-    onClick={() => {
-        console.log("Review Clicked");
+{currentStep < form.steps.length - 1 ? (
 
-        if (!validateCurrentField()) return;
+    <button
+        type="button"
+        onClick={nextStep}
+        style={{ marginLeft: "10px" }}
+    >
+        Next
+    </button>
 
-        console.log("Setting showReview");
+) : (
 
-        setShowReview(true);
-    }}
->
-    Review
-</button>
+    <button
+        type="button"
+        style={{ marginLeft: "10px" }}
+        onClick={() => {
+
+            if (!validateCurrentField()) return;
+
+            setShowReview(true);
+
+        }}
+    >
+        Review
+    </button>
+
+)}
 
 </div>
 
