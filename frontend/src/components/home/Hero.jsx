@@ -1,39 +1,89 @@
 import { useNavigate } from "react-router-dom";
+import "./Hero.css";
+
 function Hero() {
-  const navigate = useNavigate();
-  return (
-    <section className="min-h-[80vh] flex flex-col justify-center items-center bg-slate-950 text-white px-6">
+    const navigate = useNavigate();
 
-      <h1 className="text-6xl font-bold text-cyan-400">
-        AuraGen
-      </h1>
+    return (
+        <section id="home" className="hero">
 
-      <p className="mt-6 text-2xl text-gray-300">
-        Self-Healing Generative UI
-      </p>
+            <div className="hero-content">
 
-      <p className="mt-4 max-w-2xl text-center text-gray-500">
-        AuraGen detects user frustration while interacting with complex
-        interfaces and dynamically transforms them into simpler,
-        AI-generated experiences in real time.
-      </p>
+                {/* Left Side */}
 
-      <button
-    onClick={() => {
+                <div className="hero-left">
 
-        localStorage.removeItem("auraGenFormData");
-        localStorage.removeItem("auraGenCurrentStep");
+                    <span className="hero-badge">
+                        AI Powered Adaptive UI
+                    </span>
 
-        navigate("/demo");
+                    <h1 className="hero-title">
+                        Adaptive Interfaces
+                        <br />
+                        Powered by AI
+                    </h1>
 
-    }}
-    className="mt-10 px-8 py-3 bg-cyan-500 rounded-lg hover:bg-cyan-600 transition"
->
-    Launch Demo
-</button>
+                    <p className="hero-description">
+                        AuraGen intelligently detects user behaviour,
+                        understands friction in real time, and dynamically
+                        transforms interfaces into simpler,
+                        AI-powered experiences.
+                    </p>
 
-    </section>
-  );
+                    <div className="hero-buttons">
+
+    <button
+        className="hero-secondary-btn"
+        onClick={() => {
+
+            document
+                .getElementById("features")
+                ?.scrollIntoView({
+                    behavior: "smooth",
+                });
+
+        }}
+    >
+        Learn More
+    </button>
+
+</div>
+
+                </div>
+
+                {/* Right Side */}
+
+                <div className="hero-right">
+
+                    <div className="ai-preview">
+
+                        <h3>AI Engine</h3>
+
+                        <p>🟢 Connected</p>
+
+                        <div className="preview-row">
+                            <span>Cognitive Score</span>
+                            <strong>78%</strong>
+                        </div>
+
+                        <div className="preview-row">
+                            <span>Confidence</span>
+                            <strong>94%</strong>
+                        </div>
+
+                        <div className="preview-row">
+                            <span>Status</span>
+                            <strong>Monitoring User</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+    );
 }
 
 export default Hero;

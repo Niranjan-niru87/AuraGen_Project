@@ -1,0 +1,116 @@
+/* Import Design Tokens */
+@import "./variables.css";
+
+/* ===========================
+   RESET
+=========================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ===========================
+   BODY
+=========================== */
+
+body {
+
+    font-family: var(--font-family);
+
+    background: var(--bg-primary);
+
+    color: var(--text-primary);
+
+    min-height: 100vh;
+
+    line-height: 1.6;
+
+    -webkit-font-smoothing: antialiased;
+
+}
+
+/* ===========================
+   HEADINGS
+=========================== */
+
+h1 {
+
+    font-size: var(--font-xl);
+
+    font-weight: 700;
+
+}
+
+h2 {
+
+    font-size: var(--font-lg);
+
+    font-weight: 600;
+
+}
+
+h3 {
+
+    font-size: var(--font-md);
+
+    font-weight: 600;
+
+}
+
+p {
+
+    color: var(--text-secondary);
+
+    font-size: var(--font-sm);
+
+}
+
+/* ===========================
+   LINKS
+=========================== */
+
+a {
+
+    text-decoration: none;
+
+    color: inherit;
+
+}
+
+/* ===========================
+   BUTTONS
+=========================== */
+
+button {
+
+    cursor: pointer;
+
+    border: none;
+
+    outline: none;
+
+    font-family: inherit;
+
+}
+
+/* ===========================
+   INPUTS
+=========================== */
+
+input,
+textarea,
+select {
+
+    font-family: inherit;
+
+    outline: none;
+
+}
+
+html{
+
+    scroll-behavior:smooth;
+
+}

@@ -1,51 +1,105 @@
+import "./Features.css";
+
+import {
+    Brain,
+    Sparkles,
+    Activity,
+    ShieldCheck,
+    ArrowRight,
+} from "lucide-react";
+
 function Features() {
-  const features = [
-    {
-      title: "Cognitive Load Detection",
-      description:
-        "Detects user frustration using mouse movement, hesitation, and click behavior.",
-    },
-    {
-      title: "AI Generated UI",
-      description:
-        "Uses AI to generate simpler interfaces dynamically based on user behavior.",
-    },
-    {
-      title: "Real-Time Adaptation",
-      description:
-        "Updates the interface instantly without refreshing the page.",
-    },
-    {
-      title: "Secure Rendering",
-      description:
-        "Validates AI-generated components before displaying them.",
-    },
-  ];
 
-  return (
-    <section className="bg-slate-900 text-white py-20 px-8">
-      <h2 className="text-4xl font-bold text-center text-cyan-400 mb-12">
-        Core Features
-      </h2>
+    const features = [
 
-      <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-        {features.map((feature, index) => (
-          <div
-            key={index}
-            className="bg-slate-800 rounded-xl p-6 shadow-lg hover:scale-105 transition"
-          >
-            <h3 className="text-2xl font-semibold text-cyan-300">
-              {feature.title}
-            </h3>
+    {
+        icon: <Brain size={40} />,
+        iconClass: "brain",
+        title: "Cognitive Load Detection",
+        description:
+            "Detects hesitation, mouse behaviour, and interaction patterns to understand user frustration.",
+    },
 
-            <p className="mt-4 text-gray-400">
-              {feature.description}
-            </p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
+    {
+        icon: <Sparkles size={40} />,
+        iconClass: "sparkles",
+        title: "AI Generated UI",
+        description:
+            "Generates adaptive user interfaces dynamically using AI-driven decision making.",
+    },
+
+    {
+        icon: <Activity size={40} />,
+        iconClass: "activity",
+        title: "Real-Time Adaptation",
+        description:
+            "Updates interfaces instantly while preserving user progress and context.",
+    },
+
+    {
+        icon: <ShieldCheck size={40} />,
+        iconClass: "shield",
+        title: "Secure Rendering",
+        description:
+            "Validates generated components before rendering them to ensure safe execution.",
+    },
+
+];
+    return (
+
+        <section id="features" className="features"> 
+
+            <div className="features-header">
+
+                <span className="section-badge">
+                    Platform Capabilities
+                </span>
+
+                <h2>
+                    Everything Needed For
+                    <br />
+                    Adaptive User Interfaces
+                </h2>
+
+                <p>
+                    AuraGen combines AI, telemetry, behavioural analysis,
+                    and adaptive rendering into one intelligent platform.
+                </p>
+
+            </div>
+
+            <div className="features-grid">
+
+                {features.map((feature, index) => (
+
+                    <div
+                        key={index}
+                        className="feature-card"
+                    >
+
+                        <div className={`feature-icon ${feature.iconClass}`}>
+                            {feature.icon}
+                        </div>
+
+                        <h3>{feature.title}</h3>
+
+                        <p>{feature.description}</p>
+
+                        <a href="#">
+                            Learn More
+                            <ArrowRight size={18} />
+                        </a>
+
+                    </div>
+
+                ))}
+
+            </div>
+
+        </section>
+
+    );
+
 }
 
 export default Features;

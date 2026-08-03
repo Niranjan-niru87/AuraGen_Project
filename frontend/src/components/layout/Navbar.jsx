@@ -1,21 +1,117 @@
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import "./Navbar.css";
+import logo from "../../assets/auragen-logo.png";
 function Navbar() {
-  return (
-    <nav className="w-full bg-slate-900 text-white shadow-md">
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
 
-        <h1 className="text-2xl font-bold text-cyan-400">
-          AuraGen
-        </h1>
+    const navigate = useNavigate();
 
-        <ul className="flex gap-8 text-gray-300">
-          <li className="hover:text-cyan-400 cursor-pointer">Home</li>
-          <li className="hover:text-cyan-400 cursor-pointer">Features</li>
-          <li className="hover:text-cyan-400 cursor-pointer">About</li>
-        </ul>
+    const [activeSection, setActiveSection] = useState("home");
 
-      </div>
-    </nav>
-  );
+    useEffect(() => {
+
+        const handleScroll = () => {
+
+            const features = document.getElementById("features");
+            const contact = document.getElementById("contact");
+
+            const scrollY = window.scrollY + 150;
+
+            if (contact && scrollY >= contact.offsetTop) {
+
+                setActiveSection("contact");
+
+            } else if (features && scrollY >= features.offsetTop) {
+
+                setActiveSection("features");
+
+            } else {
+
+                setActiveSection("home");
+
+            }
+
+        };
+
+        window.addEventListener("scroll", handleScroll);
+
+        handleScroll();
+
+        return () => {
+
+            window.removeEventListener("scroll", handleScroll);
+
+        };
+
+    }, []);
+    return (
+
+        <nav className="navbar">
+
+            <div className="navbar-container">
+
+                <div className="navbar-logo">
+                <img src={logo} alt="AuraGen Logo" />
+                <span>AuraGen</span>
+                </div>
+                {/* Navigation */}
+
+                <ul className="navbar-links">
+
+    <li
+    className={`navbar-link ${activeSection === "home" ? "active" : ""}`}
+    onClick={() =>
+        document.getElementById("home")
+            ?.scrollIntoView({ behavior: "smooth" })
+    }
+>
+    Home
+</li>
+
+    <li
+    className={`navbar-link ${activeSection === "features" ? "active" : ""}`}
+    onClick={() =>
+        document.getElementById("features")
+            ?.scrollIntoView({ behavior: "smooth" })
+    }
+>
+    Features
+</li>
+
+    <li
+    className={`navbar-link ${activeSection === "contact" ? "active" : ""}`}
+    onClick={() =>
+        document.getElementById("contact")
+            ?.scrollIntoView({ behavior: "smooth" })
+    }
+>
+    Contact
+</li>
+
+</ul>
+
+                {/* CTA */}
+
+                <button
+                    className="navbar-demo-btn"
+                    onClick={() => {
+
+                        localStorage.removeItem("auraGenFormData");
+                        localStorage.removeItem("auraGenCurrentStep");
+
+                        navigate("/demo");
+
+                    }}
+                >
+                    🚀 Launch AI Demo
+                </button>
+
+            </div>
+
+        </nav>
+
+    );
+
 }
 
 export default Navbar;

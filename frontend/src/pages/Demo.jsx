@@ -1,10 +1,10 @@
-import Navbar from "../components/layout/Navbar";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import DynamicForm from "../components/wizard/DynamicForm";
 import TelemetryPanel from "../components/telemetry/TelemetryPanel";
 import socket from "../services/websocket";
+import "./Demo.css";
 
 function Demo() {
 
@@ -76,16 +76,17 @@ function Demo() {
 
     return (
     <>
-    <Navbar />
 
-    <div className="p-4">
-        <Link
-            to="/"
-            className="inline-block mb-4 text-cyan-400 hover:text-cyan-300"
-        >
-            ← Back Home
-        </Link>
-    </div>
+    <div className="demo-header">
+
+    <Link
+        to="/"
+        className="back-button"
+    >
+        ← Back to Home
+    </Link>
+
+</div>
 
     <TelemetryPanel />
     <DynamicForm form={form} />

@@ -1,0 +1,283 @@
+@import "../../styles/variables.css";
+
+/* ===========================
+   FEATURES SECTION
+=========================== */
+
+.features {
+
+    padding: 120px 8%;
+
+    background: var(--bg-secondary);
+
+}
+
+/* ===========================
+   HEADER
+=========================== */
+
+.features-header {
+
+    max-width: 700px;
+
+    margin: auto;
+
+    text-align: center;
+
+    margin-bottom: 70px;
+}
+
+.section-badge {
+
+    display: inline-block;
+
+    padding: 8px 18px;
+
+    border-radius: 999px;
+
+    background: rgba(139,92,246,.12);
+
+    border: 1px solid rgba(139,92,246,.30);
+
+    color: var(--secondary);
+
+    font-size: 14px;
+
+    margin-bottom: 20px;
+}
+
+.features-header h2 {
+
+    font-size: 48px;
+
+    color: white;
+
+    margin-bottom: 20px;
+
+    line-height: 1.2;
+}
+
+.features-header p {
+
+    font-size: 18px;
+
+    color: var(--text-secondary);
+
+    line-height: 1.8;
+}
+
+/* ===========================
+   GRID
+=========================== */
+
+.features-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+
+    gap: 30px;
+
+    max-width: 1400px;
+
+    margin: auto;
+}
+
+/* ===========================
+   CARD
+=========================== */
+
+.feature-card {
+
+    background: rgba(255,255,255,.04);
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    backdrop-filter: blur(15px);
+
+    border-radius: 20px;
+
+    padding: 35px;
+
+    transition:
+
+    transform .35s ease,
+
+    box-shadow .35s ease,
+
+    border-color .35s ease;
+
+    box-shadow: var(--shadow-card);
+
+
+}
+.feature-card{
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.feature-card:hover {
+
+    transform:
+        translateY(-12px)
+        scale(1.02);
+
+    border-color: var(--primary);
+
+    box-shadow:
+        0 25px 50px rgba(6,182,212,.18);
+
+}
+
+.feature-icon {
+
+    width: 70px;
+
+    height: 70px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    border-radius: 18px;
+
+    margin-bottom: 25px;
+
+    background: rgba(6,182,212,.10);
+
+    color: var(--primary);
+}
+
+.feature-card h3 {
+
+    color: white;
+
+    margin-bottom: 18px;
+
+    font-size: 24px;
+}
+
+.feature-card p {
+
+    line-height: 1.8;
+
+    margin-bottom: 30px;
+}
+
+/* ===========================
+   LINK
+=========================== */
+
+.feature-card a {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: var(--primary);
+
+    font-weight: 600;
+
+    transition: .3s;
+}
+
+.feature-card a:hover {
+
+    gap: 15px;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media(max-width:768px){
+
+.features {
+
+    padding:80px 20px;
+}
+
+.features-header h2{
+
+    font-size:36px;
+}
+
+}
+
+/* ===========================
+   FEATURE ICON COLORS
+=========================== */
+
+.feature-icon.brain{
+
+    background:rgba(6,182,212,.15);
+
+    color:#06b6d4;
+
+}
+
+.feature-icon.sparkles{
+
+    background:rgba(139,92,246,.15);
+
+    color:#8b5cf6;
+
+}
+
+.feature-icon.activity{
+
+    background:rgba(34,197,94,.15);
+
+    color:#22c55e;
+
+}
+
+.feature-icon.shield{
+
+    background:rgba(249,115,22,.15);
+
+    color:#f97316;
+
+}
+.feature-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:-120%;
+
+    width:80%;
+
+    height:100%;
+
+    background:linear-gradient(
+
+        90deg,
+
+        transparent,
+
+        rgba(255,255,255,.08),
+
+        transparent
+
+    );
+
+    transition:.8s;
+
+}
+
+.feature-card:hover::before{
+
+    left:130%;
+
+}
