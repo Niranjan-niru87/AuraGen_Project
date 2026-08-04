@@ -79,17 +79,23 @@ const form = await generateAdaptiveUI(
 console.log("✅ Form Generated");
 console.log(form);
 
-console.log("✅ Sending To React");
+console.log("✅ Sending Adaptive UI To React");
+
 
 ws.send(JSON.stringify({
-    type: "connected",
-    message: "Connected to AuraGen Backend"
+
+    type: "adaptiveUI",
+
+    payload: form,
+
+    decision: decision
+
 }));
 
-console.log("✅ Sent Successfully");
 
-});
+console.log("✅ Adaptive UI Sent Successfully");
 
-    ws.send("Connected to AuraGen Backend");
 
-});
+    });   // message close
+
+});       // websocket connection close

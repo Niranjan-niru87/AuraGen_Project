@@ -1,0 +1,166 @@
+.ai-overlay{
+    position:fixed;
+    inset:0;
+
+    background:rgba(5,10,25,.92);
+
+    backdrop-filter:blur(10px);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    z-index:9999;
+}
+
+.ai-card{
+
+    width:500px;
+
+    background:#1A2233;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:24px;
+
+    padding:40px;
+
+    text-align:center;
+
+    box-shadow:
+    0 0 40px rgba(0,220,255,.15);
+
+}
+
+.ai-spinner{
+
+    width:80px;
+    height:80px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    border:6px solid rgba(255,255,255,.15);
+
+    border-top:6px solid #13D8FF;
+
+    animation:spin 1s linear infinite;
+
+}
+
+@keyframes spin{
+
+    from{
+
+        transform:rotate(0deg);
+
+    }
+
+    to{
+
+        transform:rotate(360deg);
+
+    }
+
+}
+
+.ai-card h2{
+
+    margin-top:25px;
+
+    color:white;
+
+    font-size:32px;
+
+}
+
+.ai-status{
+
+    margin-top:10px;
+
+    color:#8FA2C7;
+
+}
+
+.progress-bar{
+
+    margin-top:30px;
+
+    height:10px;
+
+    background:#0D1425;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+}
+
+.progress-fill{
+
+    width:70%;
+
+    height:100%;
+
+    background:linear-gradient(
+        90deg,
+        #16D4FF,
+        #7A5CFF
+    );
+
+    animation:progressMove 2s infinite alternate;
+
+}
+
+@keyframes progressMove{
+
+    from{
+
+        width:40%;
+
+    }
+
+    to{
+
+        width:90%;
+
+    }
+
+}
+
+.ai-steps{
+
+    margin-top:30px;
+
+    text-align:left;
+
+}
+
+.step{
+
+    margin-bottom:12px;
+
+    color:#9EB0CF;
+
+}
+
+.done{
+
+    color:#35E27D;
+
+}
+
+.active{
+
+    color:#16D4FF;
+
+    font-weight:bold;
+
+}
+
+.waiting{
+
+    color:#777;
+
+}

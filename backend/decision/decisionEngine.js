@@ -1,33 +1,74 @@
 function analyzeTelemetry(data) {
 
-    if (data.idleTime >= 10) {
+
+    const score = Number(data.cognitiveScore);
+
+
+    console.log(
+        "Cognitive Score:",
+        score
+    );
+
+
+    // High confusion
+
+    if(score >= 70){
 
         return {
-            mode: "SIMPLIFIED",
-            reason: "User is hesitating",
-            formType: "simple"
+
+            mode:"SIMPLIFIED",
+
+            reason:
+            "High cognitive load detected",
+
+            formType:"simple",
+
+            adaptive:true
+
         };
 
     }
 
-    if (Number(data.velocity) < 0.5) {
+
+
+    // Medium confusion
+
+    if(score >= 40){
 
         return {
-            mode: "GUIDED",
-            reason: "Mouse movement is slow",
-            formType: "guided"
+
+            mode:"GUIDED",
+
+            reason:
+            "User needs assistance",
+
+            formType:"guided",
+
+            adaptive:true
+
         };
 
     }
+
+
+
+    // Normal
 
     return {
 
-        mode: "NORMAL",
-        reason: "User is comfortable",
-        formType: "normal"
+        mode:"NORMAL",
+
+        reason:
+        "User is comfortable",
+
+        formType:"normal",
+
+        adaptive:false
 
     };
 
+
 }
+
 
 module.exports = analyzeTelemetry;

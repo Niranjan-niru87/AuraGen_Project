@@ -1,14 +1,66 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import AdaptationBadge from "../components/ui/AdaptationBadge";
+import AIProcessing from "../components/ui/AIProcessing";
 import DynamicForm from "../components/wizard/DynamicForm";
 import TelemetryPanel from "../components/telemetry/TelemetryPanel";
+import AdaptiveLoader from "../components/ui/AdaptiveLoader";
 import socket from "../services/websocket";
 import "./Demo.css";
 
 function Demo() {
 
     const [form, setForm] = useState(null);
+    const [isProcessing, setIsProcessing] = useState(true);
+    const [isGeneratingUI, setIsGeneratingUI] = useState(false);
+    const [adaptationMessage, setAdaptationMessage] = useState("");
+    const [showForm, setShowForm] = useState(true);
+
+   const testAdaptiveUI = () => {
+
+    const adaptiveForm = {
+
+        title:"Simplified Registration",
+
+        description:
+        "AuraGen simplified this interface based on your behaviour.",
+
+        cognitiveScore:35,
+
+        steps:[
+            {
+                label:"Name",
+                field:"fullName",
+                type:"text",
+                required:true
+            }
+        ]
+
+    };
+
+
+    console.log("Before Adaptive Change");
+
+
+    setShowForm(false);
+
+    setIsGeneratingUI(true);
+
+
+    setTimeout(()=>{
+
+        console.log("Applying Adaptive UI");
+
+        setForm(adaptiveForm);
+
+        setIsGeneratingUI(false);
+
+        setShowForm(true);
+
+    },2500);
+
+};
 
     // Load initial form
     useEffect(() => {
@@ -30,6 +82,10 @@ function Demo() {
             console.log("Step 4: Data", data);
 
             setForm(data);
+
+            setTimeout(() => {
+            setIsProcessing(false);
+            }, 3000);
 
             console.log("Step 5: Form Stored");
 
@@ -60,36 +116,125 @@ function Demo() {
 
     console.log(message);
 
-    if (message.type === "adaptiveUI") {
-        console.log("Received payload:", message.payload);
-        setForm(message.payload);
+   if (message.type === "adaptiveUI") {
+
+    const score = message.payload.cognitiveScore;
+
+    console.log("Cognitive Score:", score);
+
+
+    if(score >= 70){
+
+        console.log(
+            "High Cognitive Load detected. Adapting UI..."
+        );
+
+
+        setShowForm(false);
+
+        setIsGeneratingUI(true);
+
+        setAdaptationMessage(
+"AI simplified this interface based on your interaction behaviour."
+);
+
+
+        setTimeout(() => {
+
+            setForm(message.payload);
+
+            setIsGeneratingUI(false);
+
+            setShowForm(true);
+
+        },2500);
+
+
+    } else {
+
+        console.log(
+            "Cognitive Load Normal. Keeping current UI."
+        );
+
     }
+
+}
 };
 
     }, []);
+   if (isProcessing) {
+    return <AIProcessing />;
+}
 
-    if (!form) {
 
-        return <h2>Loading...</h2>;
+if (isGeneratingUI) {
+    return <AdaptiveLoader />;
+}
 
-    }
 
-    return (
-    <>
-
+if (!form) {
+    return <AIProcessing />;
+}
+return (
+<>
     <div className="demo-header">
 
-    <Link
-        to="/"
-        className="back-button"
-    >
-        ← Back to Home
-    </Link>
+<Link
+to="/"
+className="back-button"
+>
+← Back to Home
+</Link>
+
+
+<button
+className="adaptive-test-button"
+onClick={testAdaptiveUI}
+>
+🤖 Test Adaptive UI
+</button>
+
 
 </div>
 
     <TelemetryPanel />
-    <DynamicForm form={form} />
+    {
+adaptationMessage && (
+
+<AdaptationBadge 
+message={adaptationMessage}
+/>
+
+)
+}
+    {adaptationMessage && (
+    <div className="adaptation-message">
+
+<div className="adaptation-title">
+
+🤖 AuraGen AI Adaptation
+
+</div>
+
+
+<p>
+
+Your interaction behaviour indicated difficulty.
+AuraGen simplified this interface to reduce cognitive load.
+
+</p>
+
+</div>
+    
+    
+)}
+
+    {showForm && (
+        <div className="form-transition">
+            <DynamicForm form={form} />
+        </div>
+    )}
+
 </>
 );
 }

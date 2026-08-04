@@ -181,7 +181,9 @@ console.log("Review Data:", formData);
 
     return (
 
-        <div>
+<div className="adaptive-container">
+
+    <div className="adaptive-card">
 
             <h1>{form.title}</h1>
 
@@ -201,27 +203,34 @@ console.log("Review Data:", formData);
         {draftMessage}
     </div>
 )}
-            <div
-    style={{
-        width: "100%",
-        backgroundColor: "#ddd",
-        borderRadius: "8px",
-        overflow: "hidden",
-        margin: "20px 0",
-    }}
->
-    <div
-        style={{
-            width: `${progress}%`,
-            backgroundColor: "#4CAF50",
-            color: "white",
-            textAlign: "center",
-            padding: "8px 0",
-            transition: "width 0.3s ease",
-        }}
-    >
-        {Math.round(progress)}%
+           <div className="progress-wrapper">
+
+    <div className="progress-header">
+
+        <span>
+            Completion Progress
+        </span>
+
+        <span>
+            {Math.round(progress)}%
+        </span>
+
     </div>
+
+
+    <div className="progress-container">
+
+        <div
+            className="progress-fill"
+            style={{
+                width:`${progress}%`
+            }}
+        >
+
+        </div>
+
+    </div>
+
 </div>
 
     <form onSubmit={handleSubmit}>
@@ -254,7 +263,7 @@ console.log("Review Data:", formData);
         {submitError}
     </p>
 )}
-    <div style={{ marginTop: "20px" }}>
+    <div className="button-group">
         {validationError && (
     <p
         style={{
@@ -306,10 +315,11 @@ console.log("Review Data:", formData);
 </div>
 
 </form>
-
         </div>
 
-    );
+    </div>
+
+);
 
 }
 

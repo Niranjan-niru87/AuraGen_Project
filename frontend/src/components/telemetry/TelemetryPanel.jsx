@@ -1,19 +1,52 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import socket from "../../services/websocket";
 import useMouseTracker from "../../hooks/useMouseTracker";
 import useClickTracker from "../../hooks/useClickTracker";
 import useHesitationTracker from "../../hooks/useHesitationTracker";
 import useMouseVelocity from "../../hooks/useMouseVelocity";
+import { calculateCognitiveScore } from "../../hooks/cognitiveScore";
+import "./TelemetryPanel.css";
 
 function TelemetryPanel() {
   const position = useMouseTracker();
   const clicks = useClickTracker();
   const idleTime = useHesitationTracker();
   const velocity = useMouseVelocity();
-  const cognitiveScore = Math.min(
-  100,
-  clicks * 2 + idleTime * 5 + Number(velocity) * 10
-   );
+ const cognitiveScore = calculateCognitiveScore(
+    clicks,
+    idleTime,
+    velocity
+);
+const adaptationTriggered = useRef(false);
+
+
+useEffect(()=>{
+
+    if(
+        cognitiveScore >= 70 &&
+        !adaptationTriggered.current
+    ){
+
+        console.log(
+            "🧠 High Cognitive Load Detected"
+        );
+
+
+        adaptationTriggered.current = true;
+
+
+        socket.send(JSON.stringify({
+
+            type:"generateAdaptiveUI",
+
+            cognitiveScore
+
+        }));
+
+    }
+
+
+},[cognitiveScore]);
  useEffect(() => {
 
     console.log("=================================");
@@ -45,7 +78,7 @@ function TelemetryPanel() {
 }, [position, clicks, idleTime, velocity, cognitiveScore]);
 
   return (
-    <div className="fixed bottom-5 right-5 bg-slate-800 text-white p-4 rounded-lg shadow-lg">
+    <div className="telemetry-panel">
 
       <h2 className="text-cyan-400 font-bold mb-2">
         Telemetry Panel
@@ -60,9 +93,12 @@ function TelemetryPanel() {
       <p>Idle Time : {idleTime} sec</p>
 
       <p>Velocity : {velocity}</p>
-      <p className="mt-2 text-cyan-300 font-bold">
-      Cognitive Load Score : {cognitiveScore.toFixed(0)}
-      </p>
+      <p className="cognitive-score">
+
+🧠 Cognitive Load Score :
+{cognitiveScore.toFixed(0)}
+
+</p>
 
     </div>
   );

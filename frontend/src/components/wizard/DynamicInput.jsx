@@ -12,9 +12,9 @@ function DynamicInput({ field, value, onChange }) {
             <br />
 
             <input
+    className="adaptive-input"
     type={field.type}
-    placeholder={field.label}
-    required={field.required}
+    placeholder={`Enter your ${field.label}`}
     value={value}
     onChange={onChange}
     style={{
