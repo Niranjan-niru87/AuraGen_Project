@@ -12,7 +12,13 @@ async function generateUI(telemetry) {
             contents: prompt
         });
 
-        const text = response.text.trim();
+        let text = response.text.trim();
+
+
+text = text
+.replace("```json","")
+.replace("```","")
+.trim();
 
 console.log("========== GEMINI RAW RESPONSE ==========");
 console.log(text);

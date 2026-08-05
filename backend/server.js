@@ -71,10 +71,26 @@ wss.on("connection", (ws) => {
 console.log("✅ Decision Created");
 console.log(decision);
 
-const form = await generateAdaptiveUI(
-    telemetry,
-    decision
-);
+let form;
+
+
+if(decision.shouldGenerateAI){
+
+    console.log("🤖 AI Generation Started");
+
+    form = await generateAdaptiveUI(
+        telemetry,
+        decision
+    );
+
+}
+else{
+
+    console.log("🟢 User comfortable - Using existing UI");
+
+    form = await generateUI(telemetry);
+
+}
 
 console.log("✅ Form Generated");
 console.log(form);

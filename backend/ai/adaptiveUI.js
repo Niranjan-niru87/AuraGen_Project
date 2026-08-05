@@ -1,8 +1,10 @@
-const generateUI = require("./jsonGenerator");
+const chain = require("../langchain/chain");
+
 
 async function generateAdaptiveUI(telemetry, decision) {
 
-    const enhancedTelemetry = {
+
+    const input = {
 
         ...telemetry,
 
@@ -14,10 +16,56 @@ async function generateAdaptiveUI(telemetry, decision) {
 
     };
 
-    const json = await generateUI(enhancedTelemetry);
 
-    return json;
+    try {
+
+
+        const result = await chain.invoke(input);
+
+
+        console.log(
+            "========== LANGCHAIN RESPONSE =========="
+        );
+
+        console.log(result);
+
+
+        return result;
+
+
+    } catch(error) {
+
+
+        console.error(
+            "LangChain Error:",
+            error
+        );
+
+
+        return {
+
+            title:"Registration Form",
+
+            description:
+            "Let's complete this step by step.",
+
+
+            steps:[
+
+                {
+                    label:"Full Name",
+                    field:"fullName",
+                    type:"text",
+                    required:true
+                }
+
+            ]
+
+        };
+
+    }
 
 }
+
 
 module.exports = generateAdaptiveUI;

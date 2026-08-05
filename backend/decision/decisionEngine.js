@@ -11,7 +11,6 @@ function analyzeTelemetry(data) {
 
 
     // High confusion
-
     if(score >= 70){
 
         return {
@@ -23,7 +22,9 @@ function analyzeTelemetry(data) {
 
             formType:"simple",
 
-            adaptive:true
+            adaptive:true,
+
+            shouldGenerateAI:true
 
         };
 
@@ -32,7 +33,6 @@ function analyzeTelemetry(data) {
 
 
     // Medium confusion
-
     if(score >= 40){
 
         return {
@@ -44,7 +44,9 @@ function analyzeTelemetry(data) {
 
             formType:"guided",
 
-            adaptive:true
+            adaptive:true,
+
+            shouldGenerateAI:true
 
         };
 
@@ -52,8 +54,7 @@ function analyzeTelemetry(data) {
 
 
 
-    // Normal
-
+    // Normal user
     return {
 
         mode:"NORMAL",
@@ -63,7 +64,9 @@ function analyzeTelemetry(data) {
 
         formType:"normal",
 
-        adaptive:false
+        adaptive:false,
+
+        shouldGenerateAI:false
 
     };
 
