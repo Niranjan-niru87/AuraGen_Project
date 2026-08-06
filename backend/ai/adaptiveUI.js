@@ -30,7 +30,54 @@ async function generateAdaptiveUI(telemetry, decision) {
         console.log(result);
 
 
-        return result;
+const validation = validateComponents(result);
+
+
+console.log(
+    "========== COMPONENT VALIDATION =========="
+);
+
+console.log(validation);
+
+
+
+if(!validation.valid){
+
+    console.log(
+        "❌ Invalid UI Generated. Using fallback."
+    );
+
+
+    return {
+
+        title:"Registration Form",
+
+        description:
+        "Let's complete this step by step.",
+
+
+        steps:[
+
+            {
+                label:"Full Name",
+                field:"fullName",
+                type:"text",
+                required:true
+            }
+
+        ]
+
+    };
+
+}
+
+
+console.log(
+    "✅ Component Validation Passed"
+);
+
+
+return result;
 
 
     } catch(error) {

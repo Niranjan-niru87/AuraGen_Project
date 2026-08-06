@@ -1,24 +1,50 @@
 const { ChatPromptTemplate } = require("@langchain/core/prompts");
 
+const componentLibrary = require("../components/componentLibrary");
+
+
+const componentInfo = JSON.stringify(
+    componentLibrary,
+    null,
+    2
+)
+.replace(/{/g, "{{")
+.replace(/}/g, "}}");
+
 
 const prompt = ChatPromptTemplate.fromMessages([
 
     [
         "system",
         `
-You are AuraGen AI.
+You are AuraGen AI UI Generation Agent.
 
 Your job is to generate adaptive user interfaces.
 
-Rules:
 
-1. Generate only valid JSON.
-2. Follow AuraGen UI schema.
-3. Reduce complexity when cognitive load is high.
-4. Preserve user experience.
-5. Never add explanations outside JSON.
+IMPORTANT RULES:
+
+1. Return ONLY valid JSON.
+2. Never return explanations.
+3. Use ONLY components from AuraGen Component Library.
+4. Do not create custom components.
+5. Follow the component structure exactly.
+
+
+Available AuraGen Components:
+
+${componentInfo}
+
+
+Generate UI based on:
+
+- User cognitive state
+- Decision mode
+- Form requirements
+
 `
     ],
+
 
     [
         "human",
