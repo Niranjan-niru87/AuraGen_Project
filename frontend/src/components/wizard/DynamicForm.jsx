@@ -60,7 +60,58 @@ useEffect(() => {
     const [validationError, setValidationError] = useState("");
     const [showReview, setShowReview] = useState(false);
     const navigate = useNavigate();
-    const progress = ((currentStep + 1) / form.steps.length) * 100;
+    const safeStep =
+    Math.min(currentStep, form.steps.length - 1);
+
+const progress =
+    ((safeStep + 1) / form.steps.length) * 100;
+
+useEffect(() => {
+
+    if (!form || !form.steps) return;
+
+    if (currentStep >= form.steps.length) {
+
+        setCurrentStep(form.steps.length - 1);
+
+    }
+
+}, [form]);
+
+    useEffect(() => {
+
+    if (!form || !form.steps) return;
+
+    const completedFields = form.steps
+        .filter(step => formData[step.field])
+        .map(step => step.field);
+
+    const formContext = {
+
+        currentStep,
+
+        totalSteps: form.steps.length,
+
+        formTitle: form.title,
+
+        completedFields,
+
+        formData
+
+    };
+
+    localStorage.setItem(
+        "auraGenFormContext",
+        JSON.stringify(formContext)
+    );
+
+    console.log(
+        "========== FORM CONTEXT =========="
+    );
+
+    console.log(formContext);
+
+}, [formData, currentStep, form]);
 
     const validateCurrentField = () => {
 
@@ -167,6 +218,11 @@ navigate("/success");
 console.log("Total Steps:", form.steps.length);
 console.log("Current Field:", form.steps[currentStep]);
 console.log("Review Data:", formData);
+const currentField = form.steps[currentStep];
+
+if (!currentField) {
+    return <h2>Updating Adaptive Form...</h2>;
+}
    if (showReview) {
     console.log("Current formData:", formData);
     return (
@@ -236,22 +292,26 @@ console.log("Review Data:", formData);
     <form onSubmit={handleSubmit}>
 
     <div
-    key={currentStep}
+    key={safeStep}
     style={{
         animation: "fadeIn 0.4s ease",
     }}
->
+    >
+
+        
+
+        
     <DynamicInput
-        key={form.steps[currentStep].field}
-        field={form.steps[currentStep]}
-        value={formData[form.steps[currentStep].field] || ""}
-        onChange={(e) =>
-    setFormData((prevData) => ({
-        ...prevData,
-        [form.steps[currentStep].field]: e.target.value,
-    }))
-}
-    />
+    key={currentField.field}
+    field={currentField}
+    value={formData[currentField.field] || ""}
+    onChange={(e) =>
+        setFormData((prevData) => ({
+            ...prevData,
+            [currentField.field]: e.target.value,
+        }))
+    }
+/>
 </div>
 {submitError && (
     <p
@@ -275,7 +335,7 @@ console.log("Review Data:", formData);
     </p>
 )}
 
-   {currentStep > 0 && (
+   {safeStep > 0 && (
     <button
         type="button"
         onClick={previousStep}
@@ -284,7 +344,7 @@ console.log("Review Data:", formData);
     </button>
 )}
 
-{currentStep < form.steps.length - 1 ? (
+{safeStep < form.steps.length - 1 ? (
 
     <button
         type="button"

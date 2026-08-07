@@ -52,16 +52,34 @@ useEffect(()=>{
     console.log("=================================");
     console.log("Socket ReadyState:", socket.readyState);
 
-    const telemetry = {
-        mouseX: position.x,
-        mouseY: position.y,
-        clicks,
-        idleTime,
-        velocity,
-        cognitiveScore,
-    };
+    const formContext = JSON.parse(
+    localStorage.getItem("auraGenFormContext")
+) || {};
 
-    console.log("Telemetry:", telemetry);
+const telemetry = {
+    mouseX: position.x,
+    mouseY: position.y,
+    clicks,
+    idleTime,
+    velocity,
+    cognitiveScore,
+
+    formContext
+};
+
+    console.log("========== TELEMETRY ==========");
+
+console.table({
+    mouseX: telemetry.mouseX,
+    mouseY: telemetry.mouseY,
+    clicks: telemetry.clicks,
+    idleTime: telemetry.idleTime,
+    velocity: telemetry.velocity,
+    cognitiveScore: telemetry.cognitiveScore
+});
+
+console.log("========== FORM CONTEXT ==========");
+console.log(telemetry.formContext);
 
     if (socket.readyState === WebSocket.OPEN) {
 

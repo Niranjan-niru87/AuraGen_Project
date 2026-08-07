@@ -814,3 +814,40 @@ AuraGen now has:
 The AI can now generate UI using AuraGen's predefined component system.
 
 ---
+
+# Day 25 — Context Awareness
+
+## Objective
+
+Implement Context Awareness by capturing user form progress and sending it to the AI pipeline.
+
+---
+
+## Completed Work
+
+- Added Form Context tracking.
+- Captured current step, total steps, completed fields, and form data.
+- Saved Form Context in Local Storage.
+- Extended telemetry with form context.
+- Sent form context to the backend through WebSocket.
+- Updated backend to receive and process form context.
+- Passed form context to the Decision Engine.
+- Integrated form context into the LangChain pipeline.
+- Implemented adaptive context restore mechanism.
+- Verified backend context logging and WebSocket communication.
+
+---
+
+## Issues Found
+
+- DynamicForm state synchronization issue during adaptive UI replacement.
+- Step mismatch between original form and adaptive form.
+- Review page state conflict after UI adaptation.
+
+---
+
+## Decision
+
+- DynamicForm.jsx will be completely refactored on Day 26 to provide a clean and stable implementation.
+
+---

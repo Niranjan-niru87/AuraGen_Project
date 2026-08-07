@@ -6,15 +6,27 @@ async function generateAdaptiveUI(telemetry, decision) {
 
     const input = {
 
-        ...telemetry,
+    ...telemetry,
 
-        mode: decision.mode,
+    mode: decision.mode,
 
-        formType: decision.formType,
+    formType: decision.formType,
 
-        reason: decision.reason
+    reason: decision.reason,
 
-    };
+    currentStep:
+        telemetry.formContext?.currentStep ?? 0,
+
+    totalSteps:
+        telemetry.formContext?.totalSteps ?? 0,
+
+    completedFields:
+        telemetry.formContext?.completedFields ?? [],
+
+    formData:
+        telemetry.formContext?.formData ?? {}
+
+};
 
 
     try {

@@ -64,7 +64,9 @@ wss.on("connection", (ws) => {
 
     console.log("Telemetry:");
 
-    console.table(telemetry);
+    console.log("\n========== FORM CONTEXT ==========");
+
+console.log(telemetry.formContext);
 
    const decision = analyzeTelemetry(telemetry);
 

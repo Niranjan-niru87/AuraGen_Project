@@ -141,13 +141,35 @@ function Demo() {
 
         setTimeout(() => {
 
-            setForm(message.payload);
+    // Update the UI
+    setForm(message.payload);
 
-            setIsGeneratingUI(false);
+    // Restore previous form state
+    const savedContext = JSON.parse(
+        localStorage.getItem("auraGenFormContext")
+    );
 
-            setShowForm(true);
+    if (savedContext) {
 
-        },2500);
+        console.log("========== RESTORING USER CONTEXT ==========");
+        console.log(savedContext);
+
+        localStorage.setItem(
+            "auraGenFormData",
+            JSON.stringify(savedContext.formData)
+        );
+
+        localStorage.setItem(
+            "auraGenCurrentStep",
+            savedContext.currentStep
+        );
+    }
+
+    setIsGeneratingUI(false);
+
+    setShowForm(true);
+
+},2500);
 
 
     } else {
