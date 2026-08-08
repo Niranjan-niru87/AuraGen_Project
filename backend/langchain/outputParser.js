@@ -1,17 +1,39 @@
 const { StructuredOutputParser } =
 require("@langchain/core/output_parsers");
 
+const { z } = require("zod");
+
 
 const parser =
-StructuredOutputParser.fromNamesAndDescriptions({
+StructuredOutputParser.fromZodSchema(
 
-title:"Form title",
+z.object({
 
-description:"Form description",
+title:z.string(),
 
-steps:"Array of form steps"
+description:z.string(),
 
-});
+cognitiveScore:z.number(),
+
+steps:z.array(
+
+z.object({
+
+label:z.string(),
+
+field:z.string(),
+
+type:z.string(),
+
+required:z.boolean()
+
+})
+
+)
+
+})
+
+);
 
 
 module.exports = parser;

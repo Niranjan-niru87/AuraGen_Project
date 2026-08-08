@@ -1,54 +1,63 @@
-const { ChatPromptTemplate } = require("@langchain/core/prompts");
-
-const componentLibrary = require("../components/componentLibrary");
-
-
-const componentInfo = JSON.stringify(
-    componentLibrary,
-    null,
-    2
-)
-.replace(/{/g, "{{")
-.replace(/}/g, "}}");
+const { ChatPromptTemplate } =
+require("@langchain/core/prompts");
 
 
 const prompt = ChatPromptTemplate.fromMessages([
 
-    [
-        "system",
-        `
-You are AuraGen AI UI Generation Agent.
+[
+"system",
 
-Your job is to generate adaptive user interfaces.
+`
+You are AuraGen AI Adaptive Form Generator.
 
+Your task is to generate adaptive multi-step forms.
 
 IMPORTANT RULES:
 
 1. Return ONLY valid JSON.
-2. Never return explanations.
-3. Use ONLY components from AuraGen Component Library.
-4. Do not create custom components.
-5. Follow the component structure exactly.
+2. Do not return markdown.
+3. Do not return explanations.
+4. Do not generate UI components.
+5. Do not generate Container, Card, Heading, Button, Layout, or React components.
+
+Generate only form data.
+
+Required JSON format:
+
+{{
+"title":"string",
+"description":"string",
+"cognitiveScore":number,
+
+"steps":[
+{{
+"label":"string",
+"field":"string",
+"type":"text|email|number|tel",
+"required":true
+}}
+]
+}}
+
+Rules:
+
+If mode is SIMPLIFIED:
+- Reduce fields
+- Maximum 2 steps
+
+If mode is GUIDED:
+- Add helpful descriptions in labels if needed
+
+If mode is NORMAL:
+- Generate normal registration form
+`
+],
 
 
-Available AuraGen Components:
-
-${componentInfo}
-
-
-Generate UI based on:
-
-- User cognitive state
-- Decision mode
-- Form requirements
+[
+"human",
 
 `
-    ],
-
-
-    [
-        "human",
-        `
 User Telemetry:
 
 Mouse X: {mouseX}
@@ -73,9 +82,9 @@ Reason: {reason}
 Form Type: {formType}
 
 
-Generate the adaptive UI JSON.
+Generate adaptive form JSON.
 `
-    ]
+]
 
 ]);
 

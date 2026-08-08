@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import socket from "../../services/websocket";
 import useMouseTracker from "../../hooks/useMouseTracker";
 import useClickTracker from "../../hooks/useClickTracker";
@@ -8,6 +8,59 @@ import { calculateCognitiveScore } from "../../hooks/cognitiveScore";
 import "./TelemetryPanel.css";
 
 function TelemetryPanel() {
+    const [currentField,setCurrentField] = useState("unknown");
+
+const [fieldAttempts,setFieldAttempts] = useState(0);
+
+const [fieldErrors,setFieldErrors] = useState(0);
+
+const fieldStartTime = useRef(null);
+useEffect(()=>{
+
+
+const handleFieldFocus = (event)=>{
+
+const fieldName =
+event.detail.field;
+
+
+setCurrentField(fieldName);
+
+
+localStorage.setItem(
+"auraGenCurrentField",
+fieldName
+);
+
+
+setFieldAttempts(
+prev => prev + 1
+);
+
+
+fieldStartTime.current =
+Date.now();
+
+};
+
+
+window.addEventListener(
+"auraFieldFocus",
+handleFieldFocus
+);
+
+
+return ()=>{
+
+window.removeEventListener(
+"auraFieldFocus",
+handleFieldFocus
+);
+
+};
+
+
+},[]);
   const position = useMouseTracker();
   const clicks = useClickTracker();
   const idleTime = useHesitationTracker();
@@ -22,18 +75,20 @@ const adaptationTriggered = useRef(false);
 
 useEffect(()=>{
 
-    if(
-        cognitiveScore >= 70 &&
-        !adaptationTriggered.current
-    ){
+if(
+    cognitiveScore >= 70 &&
+    !adaptationTriggered.current
+){
 
-        console.log(
-            "🧠 High Cognitive Load Detected"
-        );
+    console.log(
+        "🧠 High Cognitive Load Detected"
+    );
 
 
-        adaptationTriggered.current = true;
+    adaptationTriggered.current = true;
 
+
+    if(socket.readyState === 1){
 
         socket.send(JSON.stringify({
 
@@ -44,56 +99,106 @@ useEffect(()=>{
         }));
 
     }
+    else{
 
-
-},[cognitiveScore]);
- useEffect(() => {
-
-    console.log("=================================");
-    console.log("Socket ReadyState:", socket.readyState);
-
-    const formContext = JSON.parse(
-    localStorage.getItem("auraGenFormContext")
-) || {};
-
-const telemetry = {
-    mouseX: position.x,
-    mouseY: position.y,
-    clicks,
-    idleTime,
-    velocity,
-    cognitiveScore,
-
-    formContext
-};
-
-    console.log("========== TELEMETRY ==========");
-
-console.table({
-    mouseX: telemetry.mouseX,
-    mouseY: telemetry.mouseY,
-    clicks: telemetry.clicks,
-    idleTime: telemetry.idleTime,
-    velocity: telemetry.velocity,
-    cognitiveScore: telemetry.cognitiveScore
-});
-
-console.log("========== FORM CONTEXT ==========");
-console.log(telemetry.formContext);
-
-    if (socket.readyState === WebSocket.OPEN) {
-
-        console.log("✅ Sending telemetry...");
-
-        socket.send(JSON.stringify(telemetry));
-
-    } else {
-
-        console.log("❌ Socket is NOT open");
+        console.log(
+            "Waiting for socket..."
+        );
 
     }
 
-}, [position, clicks, idleTime, velocity, cognitiveScore]);
+}
+
+},[cognitiveScore]);
+
+ useEffect(() => {
+
+console.log("=================================");
+console.log("Socket ReadyState:", socket.readyState);
+
+
+const formContext = JSON.parse(
+localStorage.getItem("auraGenFormContext")
+) || {};
+
+
+const activeField = currentField;
+
+
+let timeSpentOnField = 0;
+
+
+if(fieldStartTime.current){
+
+timeSpentOnField =
+Math.floor(
+(Date.now() - fieldStartTime.current)
+/1000
+);
+
+}
+
+
+const telemetry = {
+
+mouseX: position.x,
+
+mouseY: position.y,
+
+clicks,
+
+idleTime,
+
+velocity,
+
+cognitiveScore,
+
+
+currentField: activeField,
+
+fieldAttempts,
+
+fieldErrors,
+
+timeSpentOnField,
+
+
+formContext
+
+};
+
+
+console.log("========== TELEMETRY ==========");
+
+console.table(telemetry);
+
+
+
+if(socket.readyState === 1){
+
+console.log("✅ Sending telemetry...");
+
+socket.send(
+JSON.stringify(telemetry)
+);
+
+}
+else{
+
+console.log("❌ Socket is NOT open");
+
+}
+
+
+},[
+position,
+clicks,
+idleTime,
+velocity,
+cognitiveScore,
+fieldAttempts,
+fieldErrors
+]);
 
   return (
     <div className="telemetry-panel">

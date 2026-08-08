@@ -63,8 +63,15 @@ useEffect(() => {
     const safeStep =
     Math.min(currentStep, form.steps.length - 1);
 
+const completedFields =
+    form.steps.filter(
+        step => formData[step.field]
+    ).length;
+
 const progress =
-    ((safeStep + 1) / form.steps.length) * 100;
+    form.steps.length > 0
+        ? (completedFields / form.steps.length) * 100
+        : 0;
 
 useEffect(() => {
 
@@ -113,67 +120,42 @@ useEffect(() => {
 
 }, [formData, currentStep, form]);
 
-    const validateCurrentField = () => {
 
-    const currentField = form.steps[currentStep];
-    const currentValue = formData[currentField.field] || "";
+const validateAllFields = () => {
 
-    if (currentField.required && currentValue.trim() === "") {
-        setValidationError(`Please enter your ${currentField.label}.`);
-        return false;
-    }
+    for (const field of form.steps) {
 
-    if (
-        currentField.type === "email" &&
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(currentValue)
-    ) {
-        setValidationError("Please enter a valid email address.");
-        return false;
+        const value =
+            formData[field.field] || "";
+
+        if (
+            field.required &&
+            value.trim() === ""
+        ) {
+
+            setValidationError(
+                `Please enter your ${field.label}.`
+            );
+
+            return false;
+        }
+
+        if (
+            field.type === "email" &&
+            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+        ) {
+
+            setValidationError(
+                "Please enter a valid email address."
+            );
+
+            return false;
+        }
     }
 
     setValidationError("");
+
     return true;
-};
-   const nextStep = () => {
-
-    const currentField = form.steps[currentStep];
-
-    const currentValue = formData[currentField.field] || "";
-
-    if (currentField.required && currentValue.trim() === "") {
-
-        setValidationError(`Please enter your ${currentField.label}.`);
-
-        return;
-    }
-    if (
-    currentField.type === "email" &&
-    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(currentValue)
-) {
-    console.log("Current Value:", currentValue);
-    setValidationError("Please enter a valid email address.");
-    return;
-}
-
-    setValidationError("");
-
-   if (currentStep < form.steps.length - 1) {
-
-    const next = currentStep + 1;
-
-    setCurrentStep(next);
-
-    localStorage.setItem(
-        "auraGenCurrentStep",
-        next
-    );
-}
-};
-
-const previousStep = () => {
-    if (currentStep > 0) {
-        setCurrentStep(currentStep - 1);
-    }
 };
 
 const handleSubmit = async (e) => {
@@ -218,11 +200,8 @@ navigate("/success");
 console.log("Total Steps:", form.steps.length);
 console.log("Current Field:", form.steps[currentStep]);
 console.log("Review Data:", formData);
-const currentField = form.steps[currentStep];
 
-if (!currentField) {
-    return <h2>Updating Adaptive Form...</h2>;
-}
+
    if (showReview) {
     console.log("Current formData:", formData);
     return (
@@ -289,90 +268,82 @@ if (!currentField) {
 
 </div>
 
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={(e) => e.preventDefault()}>
 
     <div
-    key={safeStep}
-    style={{
-        animation: "fadeIn 0.4s ease",
-    }}
-    >
-
-        
-
-        
-    <DynamicInput
-    key={currentField.field}
-    field={currentField}
-    value={formData[currentField.field] || ""}
-    onChange={(e) =>
-        setFormData((prevData) => ({
-            ...prevData,
-            [currentField.field]: e.target.value,
-        }))
-    }
-/>
-</div>
-{submitError && (
-    <p
         style={{
-            color: "red",
-            marginBottom: "15px",
+            animation: "fadeIn 0.4s ease"
         }}
     >
-        {submitError}
-    </p>
-)}
-    <div className="button-group">
+
+        {form.steps.map((field) => (
+
+            <div
+                key={field.field}
+                style={{
+                    marginBottom: "24px"
+                }}
+            >
+
+                <DynamicInput
+                    field={field}
+                    value={
+                        formData[field.field] || ""
+                    }
+                    onChange={(e) =>
+                        setFormData((prevData) => ({
+                            ...prevData,
+                            [field.field]:
+                                e.target.value,
+                        }))
+                    }
+                />
+
+            </div>
+
+        ))}
+
+
         {validationError && (
-    <p
-        style={{
-            color: "red",
-            marginBottom: "15px",
-        }}
-    >
-        {validationError}
-    </p>
-)}
 
-   {safeStep > 0 && (
-    <button
-        type="button"
-        onClick={previousStep}
-    >
-        Previous
-    </button>
-)}
+            <div
+                style={{
+                    color: "#f87171",
+                    marginBottom: "15px"
+                }}
+            >
+                {validationError}
+            </div>
 
-{safeStep < form.steps.length - 1 ? (
+        )}
 
-    <button
-        type="button"
-        onClick={nextStep}
-        style={{ marginLeft: "10px" }}
-    >
-        Next
-    </button>
 
-) : (
+        <div
+            style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "30px"
+            }}
+        >
 
-    <button
-        type="button"
-        style={{ marginLeft: "10px" }}
-        onClick={() => {
+            <button
+                type="button"
+                onClick={() => {
 
-            if (!validateCurrentField()) return;
+                    if (!validateAllFields()) {
+                        return;
+                    }
 
-            setShowReview(true);
+                    setShowReview(true);
 
-        }}
-    >
-        Review
-    </button>
+                }}
+            >
+                Review
+            </button>
 
-)}
+        </div>
 
-</div>
+    </div>
 
 </form>
         </div>

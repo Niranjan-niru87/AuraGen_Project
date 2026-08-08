@@ -197,3 +197,38 @@
     border-radius: 999px;
 
 }
+
+/* ===========================
+   ASSISTANT 
+=========================== */
+
+.navbar-assistant-button {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 1px solid #333;
+
+    background: #050505;
+    color: #fff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.navbar-assistant-button:hover {
+    background: #fff;
+    color: #000;
+}
+
+.navbar-assistant-popup {
+    position: fixed;
+
+    top: 80px;
+    right: 30px;
+
+    width: 390px;
+
+    z-index: 9999;
+}

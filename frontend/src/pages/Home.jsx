@@ -6,15 +6,16 @@ import Footer from "../components/layout/Footer";
 function Home() {
 
     return (
+    <>
+        <Navbar />
 
-        <>
-            <Navbar />
-            <Hero />
-            <Features />
-            <Footer />
-        </>
+        <Hero />
 
-    );
+        <Features />
+
+        <Footer />
+    </>
+);
 
 }
 

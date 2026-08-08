@@ -1,5 +1,6 @@
-const ai = require("./geminiClient");
+const model = require("../langchain/llm.js");
 const buildPrompt = require("./promptBuilder");
+const validateForm = require("./validator");
 
 async function generateUI(telemetry) {
 
@@ -7,10 +8,8 @@ async function generateUI(telemetry) {
 
     try {
 
-        const response = await ai.models.generateContent({
-            model: "gemini-3.5-flash-lite",
-            contents: prompt
-        });
+        const response = await model.invoke(prompt);
+
 
         let text = response.text.trim();
 
@@ -20,44 +19,75 @@ text = text
 .replace("```","")
 .trim();
 
-console.log("========== GEMINI RAW RESPONSE ==========");
+console.log("========== GROQ RAW RESPONSE ==========");
 console.log(text);
 console.log("=========================================");
 
-return JSON.parse(text);
+const parsedForm = JSON.parse(text);
+
+const isValid = validateForm(parsedForm);
+
+if(!isValid){
+
+    throw new Error(
+        "AI Generated Form Validation Failed"
+    );
+
+}
+
+console.log("✅ AI Form Validation Passed");
+
+return parsedForm;
 
     } catch (error) {
 
-        console.error("Gemini Error:", error);
+        console.error(
+    "❌ AI Generation Failed"
+);
+
+console.error(
+    "Reason:",
+    error.message
+);
+console.log(
+    "⚠️ Using Safe Fallback UI"
+);
 
         // Fallback JSON
         return {
 
-            title: "Registration Form",
+    title: "Registration Form",
 
-            description: "Let's complete this step by step.",
+    description:
+    "Let's complete this step by step.",
 
-            cognitiveScore: telemetry.cognitiveScore,
+    cognitiveScore:
+    telemetry.cognitiveScore,
 
-            steps: [
+    aiStatus:"fallback",
 
-                {
-                    label: "Full Name",
-                    field: "fullName",
-                    type: "text",
-                    required: true
-                },
+    aiMessage:
+    "AI service unavailable. Using safe adaptive UI.",
 
-                {
-                    label: "Email",
-                    field: "email",
-                    type: "email",
-                    required: true
-                }
+    steps:[
 
-            ]
+        {
+            label:"Full Name",
+            field:"fullName",
+            type:"text",
+            required:true
+        },
 
-        };
+        {
+            label:"Email",
+            field:"email",
+            type:"email",
+            required:true
+        }
+
+    ]
+
+};
 
     }
 

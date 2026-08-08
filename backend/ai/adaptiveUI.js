@@ -1,4 +1,5 @@
 const chain = require("../langchain/chain");
+const validateComponents = require("./validator.js");
 
 
 async function generateAdaptiveUI(telemetry, decision) {
@@ -9,6 +10,14 @@ async function generateAdaptiveUI(telemetry, decision) {
     ...telemetry,
 
     mode: decision.mode,
+    frictionScore:
+decision.frictionScore,
+
+frictionLevel:
+decision.frictionLevel,
+
+frictionPoint:
+decision.frictionPoint,
 
     formType: decision.formType,
 

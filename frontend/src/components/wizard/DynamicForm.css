@@ -10,20 +10,19 @@
     }
 }
 
-.adaptive-container{
+.adaptive-container {
+    width: 100%;
 
-    min-height:80vh;
+    display: flex;
 
-    display:flex;
+    justify-content: center;
 
-    justify-content:center;
+    align-items: flex-start;
 
-    align-items:flex-start;
+    padding: 20px 0 0;
 
-    padding-top:40px;
-
+    min-height: auto;
 }
-
 
 
 .adaptive-card{

@@ -1,15 +1,18 @@
-const { ChatGoogleGenerativeAI } = require("@langchain/google-genai");
+require("dotenv").config();
+
+const { ChatGroq } =
+require("@langchain/groq");
 
 
-const model = new ChatGoogleGenerativeAI({
+const model = new ChatGroq({
 
-    apiKey: process.env.GEMINI_API_KEY,
+apiKey: process.env.GROQ_API_KEY,
 
-    model: "gemini-3.5-flash-lite",
+model:"llama-3.1-8b-instant",
 
-    temperature: 0.2
+temperature:0
 
 });
 
 
-module.exports = model;
+module.exports=model;

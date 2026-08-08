@@ -8,59 +8,16 @@ import TelemetryPanel from "../components/telemetry/TelemetryPanel";
 import AdaptiveLoader from "../components/ui/AdaptiveLoader";
 import socket from "../services/websocket";
 import "./Demo.css";
+import AIAssistant from "../components/assistant/AIAssistant";
 
 function Demo() {
 
     const [form, setForm] = useState(null);
     const [isProcessing, setIsProcessing] = useState(true);
-    const [isGeneratingUI, setIsGeneratingUI] = useState(false);
     const [adaptationMessage, setAdaptationMessage] = useState("");
     const [showForm, setShowForm] = useState(true);
-
-   const testAdaptiveUI = () => {
-
-    const adaptiveForm = {
-
-        title:"Simplified Registration",
-
-        description:
-        "AuraGen simplified this interface based on your behaviour.",
-
-        cognitiveScore:35,
-
-        steps:[
-            {
-                label:"Name",
-                field:"fullName",
-                type:"text",
-                required:true
-            }
-        ]
-
-    };
-
-
-    console.log("Before Adaptive Change");
-
-
-    setShowForm(false);
-
-    setIsGeneratingUI(true);
-
-
-    setTimeout(()=>{
-
-        console.log("Applying Adaptive UI");
-
-        setForm(adaptiveForm);
-
-        setIsGeneratingUI(false);
-
-        setShowForm(true);
-
-    },2500);
-
-};
+    const [showAssistant,setShowAssistant] = useState(false);
+    const [assistantField,setAssistantField] = useState("unknown");
 
     // Load initial form
     useEffect(() => {
@@ -82,18 +39,37 @@ function Demo() {
             console.log("Step 4: Data", data);
 
             setForm(data);
+            if(data.aiStatus === "fallback"){
+
+    setAdaptationMessage(
+        "⚠️ AI unavailable. AuraGen is using safe fallback UI."
+    );
+
+}
 
             setTimeout(() => {
+
             setIsProcessing(false);
             }, 3000);
 
             console.log("Step 5: Form Stored");
 
-        } catch (error) {
+        } catch(error){
 
-            console.error("Fetch Error:", error);
+console.error(
+    "Fetch Error:",
+    error
+);
 
-        }
+
+setAdaptationMessage(
+    "⚠️ AuraGen Backend is unavailable. Please start the server."
+);
+
+
+setIsProcessing(false);
+
+}
     }
 
     // ⭐ THIS LINE IS MISSING
@@ -113,151 +89,84 @@ function Demo() {
     }
 
     const message = JSON.parse(event.data);
-
-    console.log(message);
-
-   if (message.type === "adaptiveUI") {
-
-    const score = message.payload.cognitiveScore;
-
-    console.log("Cognitive Score:", score);
+    if(message.type === "showAssistant"){
 
 
-    if(score >= 70){
-
-        console.log(
-            "High Cognitive Load detected. Adapting UI..."
-        );
-
-
-        setShowForm(false);
-
-        setIsGeneratingUI(true);
-
-        setAdaptationMessage(
-"AI simplified this interface based on your interaction behaviour."
+console.log(
+"🤖 Showing AI Assistant"
 );
 
 
-        setTimeout(() => {
-
-    // Update the UI
-    setForm(message.payload);
-
-    // Restore previous form state
-    const savedContext = JSON.parse(
-        localStorage.getItem("auraGenFormContext")
-    );
-
-    if (savedContext) {
-
-        console.log("========== RESTORING USER CONTEXT ==========");
-        console.log(savedContext);
-
-        localStorage.setItem(
-            "auraGenFormData",
-            JSON.stringify(savedContext.formData)
-        );
-
-        localStorage.setItem(
-            "auraGenCurrentStep",
-            savedContext.currentStep
-        );
-    }
-
-    setIsGeneratingUI(false);
-
-    setShowForm(true);
-
-},2500);
+setAssistantField(
+message.field
+);
 
 
-    } else {
+setShowAssistant(true);
 
-        console.log(
-            "Cognitive Load Normal. Keeping current UI."
-        );
-
-    }
 
 }
+
+    console.log(message);
+
+   if(message.type === "showAssistant"){
+
+console.log(
+"🤖 Showing AI Assistant"
+);
+
+
+setAssistantField(
+message.field || "unknown"
+);
+
+
+setShowAssistant(true);
+
+}
+
+
 };
 
     }, []);
    if (isProcessing) {
-    return <AIProcessing />;
-}
-
-
-if (isGeneratingUI) {
-    return <AdaptiveLoader />;
+    return null;
 }
 
 
 if (!form) {
-    return <AIProcessing />;
+    return null;
 }
+
+
 return (
-<>
-    <div className="demo-header">
+    <div className="demo-page">
 
-<Link
-to="/"
-className="back-button"
->
-← Back to Home
-</Link>
+        <Link to="/" className="back-home">
+            ← Back to Home
+        </Link>
 
+        <div className="demo-content">
 
-<button
-className="adaptive-test-button"
-onClick={testAdaptiveUI}
->
-🤖 Test Adaptive UI
-</button>
+            {/* FORM */}
+            {showForm && (
+                <div className="form-section">
+                    <DynamicForm form={form} />
+                </div>
+            )}
 
+            {/* AI ASSISTANT */}
+            {showAssistant && (
+                <div className="assistant-section">
+                    <AIAssistant
+                        field={assistantField}
+                    />
+                </div>
+            )}
 
-</div>
-
-    <TelemetryPanel />
-    {
-adaptationMessage && (
-
-<AdaptationBadge 
-message={adaptationMessage}
-/>
-
-)
-}
-    {adaptationMessage && (
-    <div className="adaptation-message">
-
-<div className="adaptation-title">
-
-🤖 AuraGen AI Adaptation
-
-</div>
-
-
-<p>
-
-Your interaction behaviour indicated difficulty.
-AuraGen simplified this interface to reduce cognitive load.
-
-</p>
-
-</div>
-    
-    
-)}
-
-    {showForm && (
-        <div className="form-transition">
-            <DynamicForm form={form} />
         </div>
-    )}
 
-</>
+    </div>
 );
 }
 
