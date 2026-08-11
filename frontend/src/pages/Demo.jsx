@@ -1,173 +1,275 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import AdaptationBadge from "../components/ui/AdaptationBadge";
-import AIProcessing from "../components/ui/AIProcessing";
 import DynamicForm from "../components/wizard/DynamicForm";
 import TelemetryPanel from "../components/telemetry/TelemetryPanel";
-import AdaptiveLoader from "../components/ui/AdaptiveLoader";
 import socket from "../services/websocket";
-import "./Demo.css";
 import AIAssistant from "../components/assistant/AIAssistant";
+
+import "./Demo.css";
 
 function Demo() {
 
     const [form, setForm] = useState(null);
     const [isProcessing, setIsProcessing] = useState(true);
-    const [adaptationMessage, setAdaptationMessage] = useState("");
+
     const [showForm, setShowForm] = useState(true);
-    const [showAssistant,setShowAssistant] = useState(false);
-    const [assistantField,setAssistantField] = useState("unknown");
 
-    // Load initial form
+    const [showAssistant, setShowAssistant] =
+        useState(false);
+
+    const [assistantField, setAssistantField] =
+        useState("unknown");
+
+
+    // =====================================
+    // LOAD INITIAL FORM
+    // =====================================
+
     useEffect(() => {
 
-    async function loadForm() {
+        async function loadForm() {
 
-        console.log("Step 1: loadForm started");
+            console.log("Step 1: loadForm started");
 
-        try {
+            try {
 
-            console.log("Step 2: Fetching...");
+                const response = await fetch(
+                    "http://localhost:5000/api/form"
+                );
 
-            const response = await fetch("http://localhost:5000/api/form");
+                console.log(
+                    "Step 2: Response:",
+                    response
+                );
 
-            console.log("Step 3: Response", response);
+                const data =
+                    await response.json();
 
-            const data = await response.json();
+                console.log(
+                    "Step 3: Form:",
+                    data
+                );
 
-            console.log("Step 4: Data", data);
+                setForm(data);
 
-            setForm(data);
-            if(data.aiStatus === "fallback"){
+                setTimeout(() => {
 
-    setAdaptationMessage(
-        "⚠️ AI unavailable. AuraGen is using safe fallback UI."
-    );
+                    setIsProcessing(false);
 
-}
+                }, 1000);
 
-            setTimeout(() => {
+            }
+            catch (error) {
 
-            setIsProcessing(false);
-            }, 3000);
+                console.error(
+                    "❌ Fetch Error:",
+                    error
+                );
 
-            console.log("Step 5: Form Stored");
+                setIsProcessing(false);
 
-        } catch(error){
+            }
 
-console.error(
-    "Fetch Error:",
-    error
-);
+        }
 
-
-setAdaptationMessage(
-    "⚠️ AuraGen Backend is unavailable. Please start the server."
-);
-
-
-setIsProcessing(false);
-
-}
-    }
-
-    // ⭐ THIS LINE IS MISSING
-    loadForm();
-
-}, []);
-
-    // Listen for WebSocket messages
-    useEffect(() => {
-
-       socket.onmessage = (event) => {
-
-    // Ignore plain text messages
-    if (!event.data.startsWith("{")) {
-        console.log(event.data);
-        return;
-    }
-
-    const message = JSON.parse(event.data);
-    if(message.type === "showAssistant"){
-
-
-console.log(
-"🤖 Showing AI Assistant"
-);
-
-
-setAssistantField(
-message.field
-);
-
-
-setShowAssistant(true);
-
-
-}
-
-    console.log(message);
-
-   if(message.type === "showAssistant"){
-
-console.log(
-"🤖 Showing AI Assistant"
-);
-
-
-setAssistantField(
-message.field || "unknown"
-);
-
-
-setShowAssistant(true);
-
-}
-
-
-};
+        loadForm();
 
     }, []);
-   if (isProcessing) {
-    return null;
-}
 
 
-if (!form) {
-    return null;
-}
+    // =====================================
+    // WEBSOCKET
+    // =====================================
+
+    useEffect(() => {
+
+        const handleMessage = (event) => {
+
+            console.log(
+                "📩 WebSocket Message:",
+                event.data
+            );
 
 
-return (
-    <div className="demo-page">
+            if (
+                typeof event.data !== "string"
+            ) {
+                return;
+            }
 
-        <Link to="/" className="back-home">
-            ← Back to Home
-        </Link>
 
-        <div className="demo-content">
+            if (
+                !event.data.startsWith("{")
+            ) {
 
-            {/* FORM */}
-            {showForm && (
-                <div className="form-section">
-                    <DynamicForm form={form} />
-                </div>
-            )}
+                console.log(
+                    "Plain message:",
+                    event.data
+                );
 
-            {/* AI ASSISTANT */}
-            {showAssistant && (
-                <div className="assistant-section">
-                    <AIAssistant
-                        field={assistantField}
-                    />
-                </div>
-            )}
+                return;
+
+            }
+
+
+            try {
+
+                const message =
+                    JSON.parse(event.data);
+
+
+                console.log(
+                    "📦 Parsed Message:",
+                    message
+                );
+
+
+                // ==========================
+                // SHOW AI ASSISTANT
+                // ==========================
+
+                if (
+                    message.type ===
+                    "showAssistant"
+                ) {
+
+                    console.log(
+                        "🤖 SHOWING AI ASSISTANT"
+                    );
+
+
+                    setAssistantField(
+                        message.field ||
+                        "unknown"
+                    );
+
+
+                    setShowAssistant(true);
+
+                }
+
+            }
+            catch (error) {
+
+                console.error(
+                    "❌ WebSocket JSON Error:",
+                    error
+                );
+
+            }
+
+        };
+
+
+        socket.addEventListener(
+            "message",
+            handleMessage
+        );
+
+
+        return () => {
+
+            socket.removeEventListener(
+                "message",
+                handleMessage
+            );
+
+        };
+
+    }, []);
+
+
+    // =====================================
+    // LOADING
+    // =====================================
+
+    if (isProcessing) {
+
+        return (
+            <div className="demo-loading">
+                Loading AuraGen Demo...
+            </div>
+        );
+
+    }
+
+
+    if (!form) {
+
+        return (
+            <div className="demo-loading">
+                Unable to load AuraGen form.
+            </div>
+        );
+
+    }
+
+
+    // =====================================
+    // MAIN UI
+    // =====================================
+
+    return (
+
+        <div className="demo-page">
+
+
+            {/* BACK TO HOME */}
+
+            <Link
+                to="/"
+                className="back-home"
+            >
+                ← Back to Home
+            </Link>
+
+
+            {/* MAIN CONTENT */}
+
+            <div className="demo-content">
+
+
+                {/* FORM */}
+
+                {showForm && (
+
+                    <div className="form-section">
+
+                        <DynamicForm
+                            form={form}
+                        />
+
+                    </div>
+
+                )}
+
+
+                {/* AI ASSISTANT */}
+
+                {showAssistant && (
+
+                    <div className="assistant-section">
+
+                        <AIAssistant
+                            field={assistantField}
+                        />
+
+                    </div>
+
+                )}
+
+            </div>
+
+
+            {/* TELEMETRY */}
+
+            <TelemetryPanel />
 
         </div>
 
-    </div>
-);
+    );
+
 }
 
 export default Demo;

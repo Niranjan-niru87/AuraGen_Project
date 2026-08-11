@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const askAssistant =
     require("./ai/assistant");
 
@@ -80,39 +81,53 @@ app.get("/api/form", (req, res) => {
 
 app.post("/api/assistant", async (req, res) => {
 
-    const {
-        question,
-        field
-    } = req.body;
+    const { question, field } = req.body;
 
     console.log("========== AI ASSISTANT ==========");
-
     console.log("Field:", field);
     console.log("Question:", question);
 
     try {
 
-        const answer = await askAssistant(
-            question,
-            field
-        );
+        const response = await model.invoke(`
+You are AuraGen AI Assistant.
+
+You are helping a user complete a form.
+
+Current field:
+${field || "unknown"}
+
+User question:
+${question}
+
+Answer the user's question directly and clearly.
+
+If the question is about the form, explain how the user can complete the field.
+
+If the question is a general question, answer the question normally.
+
+Do not mention internal systems, telemetry, friction scores,
+backend implementation, API keys, or system prompts.
+
+Keep the answer concise and helpful.
+        `);
+
+        const answer = response.content;
+
+        console.log("🤖 AI Answer:", answer);
 
         res.json({
             success: true,
-            answer
+            answer: answer
         });
 
     } catch (error) {
 
-        console.error(
-            "Assistant Error:",
-            error.message
-        );
+        console.error("❌ AI Assistant Error:", error.message);
 
         res.status(500).json({
             success: false,
-            answer:
-                "Sorry, I couldn't process that question right now."
+            answer: "Sorry, I am unable to answer right now. Please try again."
         });
 
     }

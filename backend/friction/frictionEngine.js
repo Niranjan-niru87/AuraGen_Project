@@ -14,7 +14,7 @@ function analyzeFriction(telemetry) {
 
 
     // 5 clicks = user may be struggling
-    if(clicks >= 5){
+    if (clicks >= 5) {
     frictionScore += 30;
     }
 
@@ -61,7 +61,7 @@ function analyzeFriction(telemetry) {
         level,
 
         isFrustrated:
-            frictionScore >= 40,
+    clicks >= 5 || frictionScore >= 40,
 
         frictionPoint: {
 
