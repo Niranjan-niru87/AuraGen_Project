@@ -9,7 +9,7 @@ function connectSocket(){
 
 
 socket = new WebSocket(
-"ws://localhost:5000"
+"wss://auragen-project.onrender.com"
 );
 
 
