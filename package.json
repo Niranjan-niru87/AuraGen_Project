@@ -1,4 +1,10 @@
 {
+  "name": "auragen-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "@langchain/groq": "^2.2.0",
     "langchain": "^1.5.4",
