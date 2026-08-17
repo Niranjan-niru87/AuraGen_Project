@@ -45,7 +45,7 @@ function AIAssistant({ field = "unknown" }) {
         try {
 
             const response = await fetch(
-                "http://localhost:5000/api/assistant",
+                "https://auragen-project.onrender.com/api/assistant",
                 {
                     method: "POST",
 
