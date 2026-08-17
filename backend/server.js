@@ -210,18 +210,17 @@ wss.on("connection", (ws) => {
             console.log(friction);
 
 
-            if (
+           if (
     friction.isFrustrated &&
-    !assistantShown
+    !assistantShown &&
+    telemetry.clicks >= 5
 ) {
-
-   if (telemetry.clicks >= 5) {
 
     console.log("🤖 Triggering AI Assistant");
 
     ws.send(JSON.stringify({
 
-        type: "showAssistant",
+        type:"showAssistant",
 
         field: friction.frictionPoint.field || "unknown",
 
@@ -229,7 +228,7 @@ wss.on("connection", (ws) => {
 
     }));
 
-}
+    assistantShown = true;
 }
 
         } catch (error) {
